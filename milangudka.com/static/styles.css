@@ -90,6 +90,13 @@ hr {
 
 @media (max-width:799px) {
     /* Mobile: paragraph full-width, images underneath in two columns */
+    /* ensure project cards show separators */
+    .portCard hr {
+        display: block !important;
+        border: 1px solid lightgrey;
+        margin: 15px auto 0 auto;
+        width: 75%;
+    }
     .projCols {
         display: flex;
         flex-direction: column;
@@ -609,12 +616,16 @@ form button:active {
     transform: none !important;
 }
 
-.pageback {
+.pageback, .submitPage {
     height: 100%;
     width: 100%;
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
     position: fixed;
     color: white;
+}
+
+.submitPage {
+    background-image: linear-gradient(to bottom right, #008080, #15b295);
 }
 
 .main404 {
@@ -1004,7 +1015,7 @@ form button:active {
         background-color: transparent;
     }
 
-    .menuButton, .menuList, .portCard hr{
+    .menuButton, .menuList {
         display: none;
     }
 
