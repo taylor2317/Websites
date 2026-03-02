@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="welcome" id="welcome">
+    <h1>Milan Gudka</h1>
+    <p>a.k.a Taylor</p>
+    <h2>Personal and Professional <br> Web Development Solutions</h2>
+    <div class="arrows">
+        <a href="#homeCont"><i class="fa-solid fa-chevron-down"></i></a>
+    </div>
+</div>
+
+<div class="homeCont" id="homeCont">
+    <div class="homeCards">
+        <h2>Tutoring</h2>
+        <p>Computer Science Online Tutoring offered from ages 11 - 16.<br>Prices from <price>£15 /hour.</price></p>
+        <div class="actionButt">
+            <a href="contact">Contact Me</a>
+        </div>
+    </div>
+    <div class="homeCards">
+        <h2>Professional Skills</h2>
+        <p>Find out more about me, and my past experience. Curriculum Vitae available here.</p>
+        <div class="actionButt">
+            <a href="about">About Me</a>
+            <a href="cv">CV</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
