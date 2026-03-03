@@ -1,4 +1,4 @@
-body{
+body {
     margin: 0px;
     position: absolute;
     font-family: "Funnel Display", serif;
@@ -14,7 +14,7 @@ html {
     overflow-x: hidden;
 }
 
-.header{
+.header {
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
     text-align: center;
     width: 100vw;
@@ -23,7 +23,7 @@ html {
     z-index: 100;
 }
 
-.header a{
+.header a {
     font-size: 30px;
     color:white;
     text-decoration: none;
@@ -78,7 +78,7 @@ hr {
     display: block;
 }
 
-.projImg p{
+.projImg p {
     font-size: small;
     color: gray;
     margin: 0.5rem auto;
@@ -134,10 +134,24 @@ hr {
     }
 
     /* Pair each image with its caption using the DOM order */
-    .projImg img:nth-of-type(1) { grid-column: 1; grid-row: 1; }
-    .projImg p:nth-of-type(1)   { grid-column: 1; grid-row: 2; }
-    .projImg img:nth-of-type(2) { grid-column: 2; grid-row: 1; }
-    .projImg p:nth-of-type(2)   { grid-column: 2; grid-row: 2; }
+    .projImg img:nth-of-type(1) {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .projImg p:nth-of-type(1) {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    .projImg img:nth-of-type(2) {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .projImg p:nth-of-type(2) {
+        grid-column: 2;
+        grid-row: 2;
+    }
 
 }
 
@@ -214,7 +228,7 @@ price {
     margin-bottom: 2.5%;
 }
 
-.actionButt a, .cvButt a{
+.actionButt a, .cvButt a {
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
     border: 1px, solid, teal;
     color: white;
@@ -240,7 +254,7 @@ price {
     margin-top: 2%;
 }
 
-.references{
+.references {
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
 }
 
@@ -249,7 +263,7 @@ price {
     color: teal;
 }
 
-.references h3, .references h3 a{
+.references h3, .references h3 a {
     color: white;
     font-weight: 500;
 }
@@ -265,7 +279,7 @@ price {
     align-items: center;
 }
 
-.cv li{
+.cv li {
     font-style: italic;
     font-size: small;
     line-height: 150%;
@@ -311,7 +325,7 @@ price {
     font-style: italic;
 }
 
-.card{
+.card {
     width: 80%;
     margin: auto;
     padding:2vw;
@@ -358,7 +372,7 @@ price {
     padding: 2%;
 }
 
-.tag{
+.tag {
     padding: 2%;
     color:white;
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
@@ -371,7 +385,7 @@ price {
     transition: 0.5s;
 }
 
-.keyTag{
+.keyTag {
     padding: 2%;
     color: teal;
     background-color: white;
@@ -492,7 +506,7 @@ price {
 
 .timelineItem:nth-child(even) {
     margin-top: 80px
-} 
+}
 
 .timeline a {
     color: black;
@@ -574,7 +588,7 @@ form button:active {
     transform: scale(0.98);
 }
 
-.footer{
+.footer {
     margin-top: 2%;
     background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
     text-align: center;
@@ -582,7 +596,7 @@ form button:active {
     user-select: text;
 }
 
-.footer a{
+.footer a {
     text-decoration: none;
     color: white;
     margin: 1%;
@@ -774,6 +788,7 @@ form button:active {
 
 .project h2 i, .project h3 {
     color: teal;
+    transition: transform 0.5s ease;
 }
 
 .projCols {
@@ -782,7 +797,7 @@ form button:active {
     text-align: justify;
 }
 
-@media (min-width:800px){
+@media (min-width:800px) {
     body, a, html {
         transition: 0.5s;
         user-select: none;
@@ -795,20 +810,20 @@ form button:active {
         margin: 0;
     }
 
-    .menuList a{
+    .menuList a {
         font-size: 100%;
     }
 
-    .welcome:hover, .homeCont:hover, .footer:hover, .cv:hover, .contForm:hover{
+    .welcome:hover, .homeCont:hover, .footer:hover, .cv:hover, .contForm:hover {
         box-shadow: 2px 2px 10px teal
     }
 
-    .homeCont{
+    .homeCont {
         margin-top: 2%;
         padding: 1%;
     }
 
-    .homeCont, .cardCont{
+    .homeCont, .cardCont {
         display: flex; 
         justify-content: space-between;
         align-items: center;
@@ -824,12 +839,12 @@ form button:active {
         width: 60%;
     }
 
-    .actionButt a{
+    .actionButt a {
         margin-left: 1%;
         margin-right: 1%;
     }
     
-    .actionButt a:hover, .cvButt a:hover{
+    .actionButt a:hover, .cvButt a:hover {
         color: teal;
         text-decoration: none;
         background-color: white;
@@ -855,7 +870,7 @@ form button:active {
         transition: 0.5s;
     }
 
-    .card:hover, .portCard:hover, .soloCard:hover{
+    .card:hover, .portCard:hover, .soloCard:hover {
         background-color: #f0f0f0;
         box-shadow: 0px 15px 30px lightgray;
         transform: translateY(-8px);
@@ -907,14 +922,14 @@ form button:active {
         margin: auto;
     }
 
-    .tag:hover{
+    .tag:hover {
         color:teal;
         background-color: white;
         background-image: none;
         box-shadow: 2px 2px 10px teal;
     }
 
-    .keyTag:hover{
+    .keyTag:hover {
         color:white;
         background-image: linear-gradient(to bottom right, #008080ee, #15b295ee);
         box-shadow: 2px 2px 10px teal;
@@ -924,11 +939,11 @@ form button:active {
         color: lightgrey;
     }
 
-    .portCard hr{
+    .portCard hr {
         display: none;
     }
 
-    .contForm a:hover{
+    .contForm a:hover {
         text-shadow: 2px 2px 10px lightgrey;
     }
 
@@ -952,7 +967,7 @@ form button:active {
         margin: 0;
     }
 
-    .projImg p{
+    .projImg p {
         margin: 0;
         margin-top: 3%;
         width: 100%;
@@ -965,8 +980,8 @@ form button:active {
     }
 }
 
-@media (min-width:1100px){
-    .header{
+@media (min-width:1100px) {
+    .header {
         text-align: left;
         padding:1vw;
         padding-left: 3.5vw;
@@ -980,7 +995,7 @@ form button:active {
         box-shadow: 2px 2px 10px teal
     }
 
-    .header a{
+    .header a {
         font-size: 100%;
         width: fit-content;
     }
@@ -990,7 +1005,7 @@ form button:active {
         font-size: 105%;
     }
 
-    .nav{
+    .nav {
         visibility: visible;
         display: inline;
         width: 60%;
@@ -999,7 +1014,7 @@ form button:active {
         line-height: 250%;
     }
 
-    .nav a{
+    .nav a {
         margin-left:20px;
         background-color: white;
         border: solid white 2px;
@@ -1008,7 +1023,7 @@ form button:active {
         font-weight: bold;
     }
 
-    .nav a:hover{
+    .nav a:hover {
         text-shadow: none;
         color:white;
         font-weight: bold;
@@ -1064,7 +1079,7 @@ form button:active {
     }
 
 
-    .fa-xmark{
+    .fa-xmark {
         top: 2%;
         left: 95%;
         width: fit-content;
