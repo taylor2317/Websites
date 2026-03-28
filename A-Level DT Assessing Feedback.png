@@ -1,0 +1,32 @@
+<!DOCTYPE "html">
+<html lang="en">
+<head>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2532383532152118"
+     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="milangudka.com/404.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display&display=swap" rel="stylesheet">
+    <title>Milan Gudka</title>
+    <meta name="description" content="Milan Gudka Personal Portfolio">
+    <link rel="icon" href="/Resources/Logo.svg">
+</head>
+
+<body>
+    <div class="pageback">
+        <div class="main404">
+            <h1>404</h1>
+            <p>Sorry, I can't find what you're looking for :(</p>
+        </div>
+
+        <div class="butt">
+            <a href="https://milangudka.com">Go Home</a>
+            <a href="https://milangudka.com/contact">Contact Me</a>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="contrast.js"></script>
