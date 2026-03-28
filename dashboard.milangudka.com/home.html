@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="grid" class="grid">
+
+        <div class="tile" data-id="clock">
+            <div class="clock">
+                <div id="time" class="time"></div>
+                <div id="date" class="date"></div>
+            </div>
+        </div>
+
+        <div class="tile" data-id="weather">
+            <div id="temp" class="temp">--°</div>
+            <div id="icon" class="icon">☁️</div>
+        </div>
+
+        <div class="tile" data-id="calculator">
+            <input class="calc-display" id="calc-display" type="text" inputmode="decimal" placeholder="0"/>
+            <div class="calc-buttons">
+                <button data-val="7">7</button>
+                <button data-val="8">8</button>
+                <button data-val="9">9</button>
+                <button data-op="/" class="op">÷</button>
+                <button data-val="4">4</button>
+                <button data-val="5">5</button>
+                <button data-val="6">6</button>
+                <button data-op="*" class="op">×</button>
+                <button data-val="1">1</button>
+                <button data-val="2">2</button>
+                <button data-val="3">3</button>
+                <button data-op="-" class="op">−</button>
+                <button data-val="0" class="zero">0</button>
+                <button data-val=".">.</button>
+                <button data-op="+" class="op">+</button>
+                <button id="calc-clear" class="clear">C</button>
+                <button id="calc-equals" class="equals">=</button>
+            </div>
+        </div>
+
+        <div class="tile" data-id="home" onclick="window.open('https://milangudka.com','_blank')">
+            <div class="home-emoji">🏠</div>
+        </div>
+
+        <div class="tile" data-id="news">
+            <div class="news-header">
+                <span>News</span>
+                <button id="news-settings-btn">⚙️</button>
+            </div>
+            <div id="news-view">
+                <div id="news-articles">Loading news…</div>
+            </div>
+            <div id="news-settings" style="display:none;">
+                <h3>News Sources</h3>
+                <div id="news-source-list"></div>
+            </div>
+        </div>
+
+        <div class="tile" data-id="calendar">
+            <div class="calendar-header">
+                <span>Calendar</span>
+                <button id="calendar-settings-btn">⚙️</button>
+            </div>
+            <div id="calendar-view">
+                <div class="events" id="events">Loading events...</div>
+            </div>
+            <div id="calendar-settings" style="display:none;">
+                <h3>Manage Calendars</h3>
+                <div id="calendar-list"></div>
+                <label>
+                    <input type="file" id="ics-upload" accept=".ics">
+                    + Add Calendar (.ics)
+                </label>
+            </div>
+        </div>
+
+        <div class="tile" data-id="notes">
+            <h3>Notes</h3>
+            <textarea id="notes-box" placeholder="Write notes here..."></textarea>
+        </div>
+
+        <div class="tile" data-id="mail1" onclick="window.open('https://outlook.live.com/mail/0/','_blank')">
+            <div class="mail-widget">
+                <div class="mail-label">Personal</div>
+                <div class="mail-emoji">📧</div>
+            </div>
+        </div>
+
+        <div class="tile" data-id="mail2" onclick="window.open('https://outlook.office.com/mail/0/','_blank')">
+            <div class="mail-widget">
+                <div class="mail-label">University</div>
+                <div class="mail-emoji">📨</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
