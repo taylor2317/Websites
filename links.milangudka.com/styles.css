@@ -1,3 +1,21 @@
+:root {
+    /* Primary Colors */
+    --color-primary: #008080;
+    --color-primary-light: #1ca088;
+    --color-secondary: #15b295;
+    
+    /* Neutral Colors */
+    --color-white: white;
+    --color-black: black;
+    --color-light-grey: lightgrey;
+    --color-shadow-light: #ffffff66;
+    --color-shadow-medium: #ffffff88;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-light));
+    --gradient-button: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-light));
+}
+
 body{
     position: absolute;
     width:100vw;
@@ -7,11 +25,11 @@ body{
     overflow-x: hidden;
     overflow-y: hidden;
     font-family: "Funnel Display", serif;
-    background-color: lightgrey;
+    background-color: var(--color-light-grey);
 }
 
 .back {
-    background-color: #008080;
+    background-color: var(--color-primary);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Crect stroke='%23008080' stroke-width='0' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='3' height='3' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cuse fill='%23248484' href='%23s' y='2'/%3E%3Cuse fill='%23248484' href='%23s' x='1' y='2'/%3E%3Cuse fill='%23338787' href='%23s' x='2' y='2'/%3E%3Cuse fill='%23338787' href='%23s'/%3E%3Cuse fill='%233e8b8b' href='%23s' x='2'/%3E%3Cuse fill='%233e8b8b' href='%23s' x='1' y='1'/%3E%3C/pattern%3E%3Cpattern id='b' width='7' height='11' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23488e8e'%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' y='5' /%3E%3Cuse href='%23s' x='1' y='10'/%3E%3Cuse href='%23s' x='2' y='1'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='8'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='5' y='2'/%3E%3Cuse href='%23s' x='5' y='6'/%3E%3Cuse href='%23s' x='6' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='h' width='5' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23488e8e'%3E%3Cuse href='%23s' y='5'/%3E%3Cuse href='%23s' y='8'/%3E%3Cuse href='%23s' x='1' y='1'/%3E%3Cuse href='%23s' x='1' y='9'/%3E%3Cuse href='%23s' x='1' y='12'/%3E%3Cuse href='%23s' x='2'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='2'/%3E%3Cuse href='%23s' x='3' y='6'/%3E%3Cuse href='%23s' x='3' y='11'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='4' y='10'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='17' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23519292'%3E%3Cuse href='%23s' y='11'/%3E%3Cuse href='%23s' x='2' y='9'/%3E%3Cuse href='%23s' x='5' y='12'/%3E%3Cuse href='%23s' x='9' y='4'/%3E%3Cuse href='%23s' x='12' y='1'/%3E%3Cuse href='%23s' x='16' y='6'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='19' height='17' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23008080'%3E%3Cuse href='%23s' y='9'/%3E%3Cuse href='%23s' x='16' y='5'/%3E%3Cuse href='%23s' x='14' y='2'/%3E%3Cuse href='%23s' x='11' y='11'/%3E%3Cuse href='%23s' x='6' y='14'/%3E%3C/g%3E%3Cg fill='%23589595'%3E%3Cuse href='%23s' x='3' y='13'/%3E%3Cuse href='%23s' x='9' y='7'/%3E%3Cuse href='%23s' x='13' y='10'/%3E%3Cuse href='%23s' x='15' y='4'/%3E%3Cuse href='%23s' x='18' y='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='53' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23008080'%3E%3Cuse href='%23s' x='2' y='5'/%3E%3Cuse href='%23s' x='16' y='38'/%3E%3Cuse href='%23s' x='46' y='42'/%3E%3Cuse href='%23s' x='29' y='20'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='59' height='71' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23008080'%3E%3Cuse href='%23s' x='33' y='13'/%3E%3Cuse href='%23s' x='27' y='54'/%3E%3Cuse href='%23s' x='55' y='55'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='g' width='139' height='97' patternUnits='userSpaceOnUse' patternTransform='scale(20.25) translate(-950.62 -712.96)'%3E%3Cg fill='%23008080'%3E%3Cuse href='%23s' x='11' y='8'/%3E%3Cuse href='%23s' x='51' y='13'/%3E%3Cuse href='%23s' x='17' y='73'/%3E%3Cuse href='%23s' x='99' y='57'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23b)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23h)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23c)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23d)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23e)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23f)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23g)' width='100%25' height='100%25'/%3E%3C/svg%3E");
     background-attachment: fixed;
     background-size: cover;
@@ -22,7 +40,7 @@ body{
 }
 
 .cont {
-    background-color: #ffffff88;
+    background-color: var(--color-shadow-medium);
     width: 90%; 
     margin: auto;
     margin-top: 5%;
@@ -51,8 +69,8 @@ h2 {
 }
 
 .socials a {
-    color: white;
-    text-shadow: 2px 2px 2px teal;
+    color: var(--color-white);
+    text-shadow: 2px 2px 2px var(--color-primary);
     margin-left: 2%;
     margin-right: 2%;
     transition: 0.5s;
@@ -66,18 +84,18 @@ h2 {
 }
 
 .buttons a {
-    color: white;
+    color: var(--color-white);
     margin-bottom: 5%;
     text-decoration: none;
-    background-color: teal;
+    background-color: var(--color-primary);
     padding: 2%;
     transition: 0.5s;
     font-size: 120%;
 }
 
 .site {
-    background-color: white!important;
-    color: teal!important;
+    background-color: var(--color-white) !important;
+    color: var(--color-primary) !important;
     font-weight: bold;
 }
 
@@ -86,19 +104,19 @@ hr {
     width: 80%;
     height: 2px;
     border:none;
-    background-image: linear-gradient(to bottom right, teal, #1ca088);
+    background-image: var(--gradient-button);
 }
 
 .cont span {
     display: inline-block;
     animation: wave 2s ease-in-out infinite;
-    color: teal;
+    color: var(--color-primary);
     font-size: larger;
     text-shadow:
-    1px 1px 0 #ffffff66,
-    -1px 1px 0 #ffffff66,
-    -1px -1px 0 #ffffff66,
-    1px -1px 0 #ffffff66;
+    1px 1px 0 var(--color-shadow-light),
+    -1px 1px 0 var(--color-shadow-light),
+    -1px -1px 0 var(--color-shadow-light),
+    1px -1px 0 var(--color-shadow-light);
 }
 
 .cont span:nth-child(1) {
@@ -155,7 +173,7 @@ hr {
     }
 
     .cont {
-        background-color: #ffffff66;
+        background-color: var(--color-shadow-light);
         margin-top: 2%;
         width: 60%;
         height: max-content;
@@ -164,12 +182,12 @@ hr {
     }
 
     .cont:hover {
-        background-color: #ffffff88;
-        box-shadow: 2px 2px 10px #ffffff66;
+        background-color: var(--color-shadow-medium);
+        box-shadow: 2px 2px 10px var(--color-shadow-light);
     }
 
     .socials a:hover {
-        color: teal;
+        color: var(--color-primary);
         text-shadow: none;
     }
 
@@ -179,13 +197,13 @@ hr {
     }
 
     .buttons a:hover {
-        background-color: white;
-        color: teal;
+        background-color: var(--color-white);
+        color: var(--color-primary);
     }
 
     .site:hover{
-        background-color: teal!important;
-        color: white!important;
+        background-color: var(--color-primary) !important;
+        color: var(--color-white) !important;
     }
 
     h2 {

@@ -6,13 +6,31 @@ body {
     overflow: hidden;
 }
 
+:root {
+    /* Primary Colors - Dark Green theme for this site */
+    --color-primary: darkgreen;
+    --color-secondary: #93c47d;
+    
+    /* Neutral Colors */
+    --color-white: white;
+    --color-black: black;
+    --color-light-grey: lightgrey;
+    --color-semi-white-light: #ffffffb3;
+    --color-semi-white-medium: #ffffffdd;
+    
+    /* Instruction Colors */
+    --color-inst-red: #ea9999;
+    --color-inst-yellow: #ffe599;
+    --color-inst-green: #93c47d;
+}
+
 /* Header styling */
 .header {
     position: fixed; /* Fixed position at the top */
     display: flex; 
     justify-content: space-between; /* Space between elements */
     align-items: center; /* Align items in the center vertically */
-    background-color: #ffffffb3; /* Semi-transparent white background */
+    background-color: var(--color-semi-white-light); /* Semi-transparent white background */
     top: 0; /* Align to top */
     left: 0; /* Align to the left */
     width: 90%; /* Take 90% of the width */
@@ -23,7 +41,7 @@ body {
 
 /* Header links and titles styling */
 .header a, .page a, .settButt a, .selPage a{
-    color: darkgreen; /* Set link and heading color to dark green */
+    color: var(--color-primary); /* Set link and heading color to dark green */
     text-decoration: none; /* Remove underline from links */
 }
 
@@ -42,7 +60,7 @@ body {
 .page a h1, .selPage a h1, .endAct h2 {
     width: max-content; /* Set width to content size */
     text-align: center; /* Center text */
-    background-color: #ffffffb3; /* Semi-transparent white background */
+    background-color: var(--color-semi-white-light); /* Semi-transparent white background */
     padding: 2%;
     margin-bottom: 1px; /* Add small margin at bottom */
 }
@@ -60,7 +78,7 @@ body {
     min-height: 70%;
     width: 90%;
     text-align: center;
-    background-color: #ffffffdd; /* Semi-transparent white background */
+    background-color: var(--color-semi-white-medium); /* Semi-transparent white background */
     margin: auto;
     justify-content: center;
     align-items: center;
@@ -69,7 +87,7 @@ body {
 }
 
 .popup h1, .popup h2, .popup .fa {
-    color: black;
+    color: var(--color-black);
 }
 
 /* Close button (X) in popup */
@@ -99,17 +117,17 @@ body {
 
 /* Red background for instructions */
 .instred {
-    background-color: #ea9999;
+    background-color: var(--color-inst-red);
 }
 
 /* Yellow background for instructions */
 .instyell {
-    background-color: #ffe599;
+    background-color: var(--color-inst-yellow);
 }
 
 /* Green background for instructions */
 .instgreen {
-    background-color: #93c47d;
+    background-color: var(--color-inst-green);
 }
 
 /* Settings button container styling */
@@ -119,8 +137,8 @@ body {
 
 /* Settings button styling */
 .settButt a {
-    background-color: white;
-    border: darkgreen 1px solid;
+    background-color: var(--color-white);
+    border: var(--color-primary) 1px solid;
     font-weight: bold;
     padding: 1%;
     font-size: larger;
@@ -133,7 +151,7 @@ body {
 
 /* Table styling for word game grid */
 table {
-    background-color: #ffffffb3; /* Semi-transparent white background */
+    background-color: var(--color-semi-white-light); /* Semi-transparent white background */
     width: 80vw; /* Width relative to viewport width */
     height: 75vh; /* Height relative to viewport height */
     font-size: larger;
@@ -147,7 +165,7 @@ table {
 /* Table cell styling */
 td {
     padding: 2%;
-    border: solid 1px darkgreen; /* Green border for table cells */
+    border: solid 1px var(--color-primary); /* Green border for table cells */
     word-wrap: break-word; /* Ensure content wraps and doesn't expand cell */
 }
 
@@ -167,7 +185,7 @@ td {
     position: fixed;
     height: 70%;
     width: 80%;
-    background-color: #ffffffb3; /* Semi-transparent white background */
+    background-color: var(--color-semi-white-light); /* Semi-transparent white background */
     margin: 10%;
     left: 0;
     top: 0;
@@ -212,7 +230,7 @@ td {
 
     /* Hover effect for header links */
     .header h1 a:hover, .header h1 i:hover {
-        color: black;
+        color: var(--color-black);
     }
 
     /* Page and selection page styling */
@@ -229,8 +247,8 @@ td {
 
     /* Hover effect for page and selection page headers */
     .page a h1:hover, .settButt a:hover, .selPage a h1:hover, .endAct h2:hover {
-        background-color: darkgreen;
-        color: white; /* Change background and text color on hover */
+        background-color: var(--color-primary);
+        color: var(--color-white); /* Change background and text color on hover */
     }
 
     .popup {
@@ -244,11 +262,11 @@ td {
 
     /* Hover effects for icons in popup */
     .popup .fa:hover {
-        color: red;
+        color: #ff0000;
     }
 
     .popup .fa-solid:hover {
-        color: darkgreen;
+        color: var(--color-primary);
     }
 
     .selPage {
@@ -270,10 +288,10 @@ td {
 
     /* Hover effects for end game buttons */
     .endButt .fa:hover {
-        color: red;
+        color: #ff0000;
     }
 
     .endButt .fa-solid:hover {
-        color: green;
+        color: var(--color-inst-green);
     }
 }
