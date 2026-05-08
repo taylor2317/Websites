@@ -54,6 +54,7 @@ body{
     padding:10px;
 }
 
+/* GRID */
 .grid{
     flex:1;
     display:grid;
@@ -103,12 +104,10 @@ body{
     font-weight:800;
 }
 
-/* MAIN CHANGE COLOURS (STILL KEPT) */
 .pos{color:#00ff99;}
 .neg{color:#ff4d4d;}
 .neutral{color:#e0e0e0;}
 
-/* VALUE ANIMATION */
 @keyframes pop {
     0%{transform:scale(1);}
     40%{transform:scale(1.25);}
@@ -126,14 +125,16 @@ body{
     flex-direction:column;
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
-    overflow-y: auto;
+    border-radius:8px;
+    overflow:hidden;
 }
 
 .panel-title{
     padding:12px;
-    font-size:1.5vw;
+    font-size:1.2vw;
     font-weight:700;
     text-align:center;
+    background:rgba(0,0,0,0.15);
 }
 
 .panel-list{
@@ -144,15 +145,29 @@ body{
     overflow-y:auto;
 }
 
-/* RECENT CHANGES (NO COLOUR-CODING) */
+/* RECENT CHANGES */
 .update-item{
+    display:flex;
+    gap:12px;
+    align-items:center;
+
     font-size:0.9vw;
     padding:8px;
     border-radius:6px;
     font-weight:800;
     color:white;
     background:rgba(255,255,255,0.12);
+
+    border-left:6px solid transparent;
 }
+
+/* PARTY COLOURED LEFT BORDER */
+.update-item.reform{border-left-color:#1fb7c9;}
+.update-item.conservative{border-left-color:#1a8fe3;}
+.update-item.labour{border-left-color:#e6003c;}
+.update-item.libdem{border-left-color:#f5a623;}
+.update-item.green{border-left-color:#6bb321;}
+.update-item.independent{border-left-color:#7a7a7a;}
 
 /* MOBILE */
 @media (orientation: portrait), (max-width: 900px){

@@ -7,7 +7,7 @@ const previousSnapshot = {};
 const updates = [];
 const MAX_UPDATES = 200;
 
-/* TIME (WITH SECONDS) */
+/* TIME */
 function updateTime() {
   const now = new Date();
 
@@ -37,7 +37,7 @@ function animateChange(el, newValue, key) {
   previousValues[key] = newValue;
 }
 
-/* MAIN CHANGE FORMAT (FIX DOUBLE + ISSUE + COLOUR) */
+/* FORMAT CHANGE */
 function formatChange(value) {
   const num = parseInt(value, 10);
   if (isNaN(num)) return { text: "--", type: "neutral" };
@@ -48,8 +48,8 @@ function formatChange(value) {
   return { text: "0", type: "neutral" };
 }
 
-/* RECENT CHANGES (5 MIN, NO SECONDS) */
-function addUpdate(party, currentSeats) {
+/* RECENT UPDATES */
+function addUpdate(party, currentSeats, key) {
   const now = Date.now();
 
   const curr = parseInt(currentSeats, 10);
@@ -65,17 +65,15 @@ function addUpdate(party, currentSeats) {
   const delta = curr - prev;
   if (delta === 0) return;
 
-  const sign = delta > 0 ? "+" : "";
-  const type = delta > 0 ? "pos" : "neg";
-
   updates.unshift({
     time: now,
     displayTime: new Date(now).toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit"
     }),
-    text: `${party} ${sign}${delta}`,
-    type
+    party,
+    delta,
+    key
   });
 
   if (updates.length > MAX_UPDATES) updates.pop();
@@ -85,7 +83,7 @@ function addUpdate(party, currentSeats) {
   renderUpdates();
 }
 
-/* PANEL RENDER (5 MIN WINDOW) */
+/* RENDER UPDATES */
 function renderUpdates() {
   const list = document.getElementById("updatesList");
   if (!list) return;
@@ -94,20 +92,25 @@ function renderUpdates() {
 
   list.innerHTML = "";
 
-  // IMPORTANT: oldest → newest
   updates
     .filter(u => u.time >= cutoff)
-    .slice()              // avoid mutating original
-    .reverse()           // <-- key change: bottom-up ordering
+    .reverse()
     .forEach(u => {
       const div = document.createElement("div");
-      div.className = `update-item ${u.type}`;
-      div.textContent = `${u.displayTime} - ${u.text}`;
+
+      const sign = u.delta > 0 ? "+" : "";
+      div.className = `update-item ${u.key}`;
+
+      div.innerHTML = `
+        <span>${u.displayTime}</span>
+        <span>${u.party}: ${sign}${u.delta}</span>
+      `;
+
       list.appendChild(div);
     });
 }
 
-/* PARSE BBC */
+/* PARSE */
 function parseBBC(data) {
   const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
 
@@ -145,7 +148,7 @@ function createCard(p) {
   const card = document.createElement("section");
   card.className = `card ${p.key}`;
 
-  const changeObj = formatChange(p.data.change);
+  const change = formatChange(p.data.change);
 
   card.innerHTML = `
     <div class="name">${p.name}</div>
@@ -163,25 +166,20 @@ function createCard(p) {
 
       <div class="metric">
         <div class="label">Change</div>
-        <div class="value change"></div>
+        <div class="value change ${change.type}"></div>
       </div>
     </div>
   `;
 
-  // store values
-  setTimeout(() => {
-    const seatsEl = card.querySelector(".seats");
-    const councilsEl = card.querySelector(".councils");
-    const changeEl = card.querySelector(".change");
+  const seatsEl = card.querySelector(".seats");
+  const councilsEl = card.querySelector(".councils");
+  const changeEl = card.querySelector(".change");
 
-    animateChange(seatsEl, p.data.seats, p.key + "_seats");
-    animateChange(councilsEl, p.data.councils, p.key + "_councils");
+  animateChange(seatsEl, p.data.seats, p.key + "_seats");
+  animateChange(councilsEl, p.data.councils, p.key + "_councils");
+  animateChange(changeEl, change.text, p.key + "_change");
 
-    animateChange(changeEl, changeObj.text, p.key + "_change");
-
-    changeEl.classList.remove("pos", "neg", "neutral");
-    changeEl.classList.add(changeObj.type);
-  }, 0);
+  addUpdate(p.name, p.data.seats, p.key);
 
   return card;
 }
@@ -191,11 +189,7 @@ function render(data) {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
-  data.forEach(p => {
-    const card = createCard(p);
-    addUpdate(p.name, p.data.seats);
-    grid.appendChild(card);
-  });
+  data.forEach(p => grid.appendChild(createCard(p)));
 }
 
 /* FETCH LOOP */
