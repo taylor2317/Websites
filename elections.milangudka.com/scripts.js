@@ -236,3 +236,15 @@ function tick() {
 
 tick();
 setInterval(tick, 3000);
+
+const fsBtn = document.getElementById("fsBtn");
+
+fsBtn.addEventListener("click", () => {
+  const doc = document.documentElement;
+
+  if (!document.fullscreenElement) {
+    doc.requestFullscreen?.();
+  } else {
+    document.exitFullscreen?.();
+  }
+});

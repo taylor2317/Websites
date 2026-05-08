@@ -53,6 +53,7 @@ body{
     flex:1;
     gap:10px;
     padding:10px;
+    align-items: stretch;
 }
 
 /* GRID */
@@ -121,13 +122,14 @@ body{
 /* PANEL */
 .updates-panel{
     width:260px;
-    max-height:82vh;
-    display:flex;
-    flex-direction:column;
+    max-height: 82vh;
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
     scrollbar-width:thin;
     scrollbar-color: var(--bg) transparent;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .panel-title{
