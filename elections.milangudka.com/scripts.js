@@ -1,57 +1,113 @@
 const DATA_URL =
 "https://static.files.bbci.co.uk/elections/data/news/election/2026/england/results";
 
-/* STORE PREVIOUS VALUES FOR ANIMATION */
+/* STATE */
 const previousValues = {};
+const previousSnapshot = {};
+const updates = [];
+const MAX_UPDATES = 200;
 
-/* TIME */
+/* TIME (WITH SECONDS) */
 function updateTime() {
   const now = new Date();
+
   document.getElementById("time").textContent =
-    now.toLocaleTimeString("en-GB");
+    now.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
 }
 
-/* FORMAT CHANGE */
-function formatChange(value) {
-  if (value === null || value === undefined) return "--";
-  const num = parseInt(value, 10);
-  if (isNaN(num)) return "--";
-  return (num > 0 ? "+" : "") + num;
-}
-
-/* ANIMATE NUMBER CHANGES */
+/* ANIMATION */
 function animateChange(el, newValue, key) {
   const oldValue = previousValues[key];
 
-  if (oldValue !== undefined && oldValue === newValue) {
-    el.textContent = newValue;
+  el.textContent = newValue;
+
+  if (oldValue === undefined || oldValue === newValue) {
+    previousValues[key] = newValue;
     return;
   }
 
-  el.textContent = newValue;
-
   el.classList.remove("updated");
-
-  // re-trigger animation
   void el.offsetWidth;
   el.classList.add("updated");
 
   previousValues[key] = newValue;
 }
 
-/* APPLY CHANGE COLOURS */
-function applyChangeClass(el, value) {
-  el.classList.remove("pos", "neg", "neutral");
-
+/* MAIN CHANGE FORMAT (FIX DOUBLE + ISSUE + COLOUR) */
+function formatChange(value) {
   const num = parseInt(value, 10);
+  if (isNaN(num)) return { text: "--", type: "neutral" };
 
-  if (isNaN(num)) el.classList.add("neutral");
-  else if (num > 0) el.classList.add("pos");
-  else if (num < 0) el.classList.add("neg");
-  else el.classList.add("neutral");
+  if (num > 0) return { text: `+${num}`, type: "pos" };
+  if (num < 0) return { text: `${num}`, type: "neg" };
+
+  return { text: "0", type: "neutral" };
 }
 
-/* PARSE BBC DATA */
+/* RECENT CHANGES (5 MIN, NO SECONDS) */
+function addUpdate(party, currentSeats) {
+  const now = Date.now();
+
+  const curr = parseInt(currentSeats, 10);
+  if (isNaN(curr)) return;
+
+  const prev = previousSnapshot[party];
+
+  if (prev === undefined) {
+    previousSnapshot[party] = curr;
+    return;
+  }
+
+  const delta = curr - prev;
+  if (delta === 0) return;
+
+  const sign = delta > 0 ? "+" : "";
+  const type = delta > 0 ? "pos" : "neg";
+
+  updates.unshift({
+    time: now,
+    displayTime: new Date(now).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit"
+    }),
+    text: `${party} ${sign}${delta}`,
+    type
+  });
+
+  if (updates.length > MAX_UPDATES) updates.pop();
+
+  previousSnapshot[party] = curr;
+
+  renderUpdates();
+}
+
+/* PANEL RENDER (5 MIN WINDOW) */
+function renderUpdates() {
+  const list = document.getElementById("updatesList");
+  if (!list) return;
+
+  const cutoff = Date.now() - 5 * 60 * 1000;
+
+  list.innerHTML = "";
+
+  // IMPORTANT: oldest → newest
+  updates
+    .filter(u => u.time >= cutoff)
+    .slice()              // avoid mutating original
+    .reverse()           // <-- key change: bottom-up ordering
+    .forEach(u => {
+      const div = document.createElement("div");
+      div.className = `update-item ${u.type}`;
+      div.textContent = `${u.displayTime} - ${u.text}`;
+      list.appendChild(div);
+    });
+}
+
+/* PARSE BBC */
 function parseBBC(data) {
   const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
 
@@ -60,11 +116,11 @@ function parseBBC(data) {
   function extract(card) {
     if (!card) return { seats: "--", councils: "--", change: "--" };
 
-    const seats = card.dataColumnsFormatted?.[1]?.[0] ?? "--";
-    const change = card.dataColumnsFormatted?.[1]?.[1] ?? "--";
-    const councils = card.dataColumnsFormatted?.[0]?.[0] ?? "--";
-
-    return { seats, councils, change };
+    return {
+      seats: card.dataColumnsFormatted?.[1]?.[0] ?? "--",
+      councils: card.dataColumnsFormatted?.[0]?.[0] ?? "--",
+      change: card.dataColumnsFormatted?.[1]?.[1] ?? "--"
+    };
   }
 
   return [
@@ -77,70 +133,72 @@ function parseBBC(data) {
   ];
 }
 
-/* SORT BY SEATS DESCENDING */
-function sortDescending(parties) {
-  return parties.sort((a, b) => {
-    const aSeats = parseInt(a.data.seats, 10) || 0;
-    const bSeats = parseInt(b.data.seats, 10) || 0;
-    return bSeats - aSeats;
-  });
+/* SORT */
+function sortDescending(data) {
+  return data.sort((a, b) =>
+    (parseInt(b.data.seats, 10) || 0) - (parseInt(a.data.seats, 10) || 0)
+  );
 }
 
-/* CREATE CARD */
-function createCard(party) {
+/* CARD */
+function createCard(p) {
   const card = document.createElement("section");
-  card.className = `card ${party.key}`;
+  card.className = `card ${p.key}`;
+
+  const changeObj = formatChange(p.data.change);
 
   card.innerHTML = `
-    <div class="name">${party.name}</div>
+    <div class="name">${p.name}</div>
 
     <div class="metrics">
-        <div class="metric">
-            <div class="label">Seats</div>
-            <div class="value seats"></div>
-        </div>
+      <div class="metric">
+        <div class="label">Seats</div>
+        <div class="value seats"></div>
+      </div>
 
-        <div class="metric">
-            <div class="label">Councils</div>
-            <div class="value councils"></div>
-        </div>
+      <div class="metric">
+        <div class="label">Councils</div>
+        <div class="value councils"></div>
+      </div>
 
-        <div class="metric">
-            <div class="label">Change</div>
-            <div class="value change"></div>
-        </div>
+      <div class="metric">
+        <div class="label">Change</div>
+        <div class="value change"></div>
+      </div>
     </div>
   `;
 
-  return card;
-}
-
-/* RENDER DASHBOARD */
-function render(parties) {
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
-
-  parties.forEach(p => {
-    const card = createCard(p);
-
+  // store values
+  setTimeout(() => {
     const seatsEl = card.querySelector(".seats");
     const councilsEl = card.querySelector(".councils");
     const changeEl = card.querySelector(".change");
 
-    const k = p.key;
+    animateChange(seatsEl, p.data.seats, p.key + "_seats");
+    animateChange(councilsEl, p.data.councils, p.key + "_councils");
 
-    animateChange(seatsEl, p.data.seats, k + "_seats");
-    animateChange(councilsEl, p.data.councils, k + "_councils");
+    animateChange(changeEl, changeObj.text, p.key + "_change");
 
-    const formattedChange = formatChange(p.data.change);
-    animateChange(changeEl, formattedChange, k + "_change");
-    applyChangeClass(changeEl, p.data.change);
+    changeEl.classList.remove("pos", "neg", "neutral");
+    changeEl.classList.add(changeObj.type);
+  }, 0);
 
+  return card;
+}
+
+/* RENDER */
+function render(data) {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  data.forEach(p => {
+    const card = createCard(p);
+    addUpdate(p.name, p.data.seats);
     grid.appendChild(card);
   });
 }
 
-/* FETCH DATA */
+/* FETCH LOOP */
 async function fetchData() {
   try {
     const res = await fetch(DATA_URL, { cache: "no-store" });
@@ -150,20 +208,18 @@ async function fetchData() {
     data = sortDescending(data);
 
     render(data);
-
   } catch (e) {
-    console.error("Fetch error:", e);
+    console.error(e);
   }
 }
 
-/* MAIN LOOP */
-function update() {
+function tick() {
   updateTime();
   fetchData();
 }
 
-update();
-setInterval(update, 3000);
+tick();
+setInterval(tick, 3000);
 
 /* FULLSCREEN */
 const fsBtn = document.getElementById("fsBtn");
@@ -178,21 +234,3 @@ fsBtn.addEventListener("click", async () => {
     icon.classList.replace("fa-compress", "fa-expand");
   }
 });
-
-/* CURSOR HIDE AFTER IDLE */
-let idleTimer;
-
-function resetIdleTimer() {
-  document.body.style.cursor = "default";
-  clearTimeout(idleTimer);
-
-  idleTimer = setTimeout(() => {
-    document.body.style.cursor = "none";
-  }, 3000);
-}
-
-window.addEventListener("mousemove", resetIdleTimer);
-window.addEventListener("keydown", resetIdleTimer);
-window.addEventListener("mousedown", resetIdleTimer);
-
-resetIdleTimer();

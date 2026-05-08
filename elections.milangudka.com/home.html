@@ -1,18 +1,14 @@
-<!DOCTYPE "html">
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="https://milangudka.com/Resources/Logo.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Funnel+Display&display=swap" rel="stylesheet">
-    <title>Milan Gudka - Live Election Tracker</title>
-    <meta name="description" content="Milan Gudka Live Election Tracker">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Election Dashboard</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
 <div class="dashboard">
 
     <header class="header">
@@ -22,19 +18,28 @@
         </div>
 
         <div class="updated">
-            Updated: <span id="time">--:--:--</span>
+            Last Updated: <span id="time">--:--:--</span>
         </div>
 
-        <button id="fsBtn" class="fs-btn" aria-label="Fullscreen">
+        <button id="fsBtn" class="fs-btn">
             <i class="fas fa-expand"></i>
         </button>
     </header>
 
-    <main class="grid" id="grid"></main>
+    <div class="main-area">
+
+        <main class="grid" id="grid"></main>
+
+        <aside class="updates-panel">
+            <div class="panel-title">Recent Changes</div>
+            <div class="panel-list" id="updatesList"></div>
+        </aside>
+
+    </div>
 
 </div>
 
 <script src="scripts.js"></script>
-<script src="https://kit.fontawesome.com/7e891fcb86.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/7e891fcb86.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;600;800&family=Oswald:wght@600&family=Merriweather:wght@700&family=Libre+Franklin:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@400;600;800&display=swap');
 
 :root{
     --bg:#d9d9d9;
@@ -38,26 +38,30 @@ body{
     border:none;
     cursor:pointer;
 }
-
 .fs-btn i{font-size:20px; color:white;}
 
-/* GRID */
+/* LAYOUT */
 .dashboard{
     height:100vh;
     display:flex;
     flex-direction:column;
 }
 
-.grid{
+.main-area{
+    display:flex;
     flex:1;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    grid-auto-rows:1fr;
     gap:10px;
     padding:10px;
 }
 
-/* CARD */
+.grid{
+    flex:1;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+}
+
+/* CARDS */
 .card{
     color:white;
     padding:1.5vh 1.5vw;
@@ -66,7 +70,6 @@ body{
     justify-content:space-between;
 }
 
-/* PARTY COLORS */
 .reform{background:#1fb7c9;}
 .conservative{background:#1a8fe3;}
 .labour{background:#e6003c;}
@@ -80,7 +83,6 @@ body{
     font-weight:700;
 }
 
-/* METRICS */
 .metrics{
     display:flex;
     justify-content:space-between;
@@ -101,146 +103,157 @@ body{
     font-weight:800;
 }
 
-/* CHANGE COLORS */
+/* MAIN CHANGE COLOURS (STILL KEPT) */
 .pos{color:#00ff99;}
-.neg{color:#ff6b6b;}
+.neg{color:#ff4d4d;}
 .neutral{color:#e0e0e0;}
 
-/* NUMBER CHANGE ANIMATION */
+/* VALUE ANIMATION */
 @keyframes pop {
-    0%   { transform: scale(1); }
-    40%  { transform: scale(1.25); }
-    100% { transform: scale(1); }
+    0%{transform:scale(1);}
+    40%{transform:scale(1.25);}
+    100%{transform:scale(1);}
 }
 
-.value.updated {
-    animation: pop 0.75s ease;
+.value.updated{
+    animation:pop 0.75s ease;
 }
 
-.flash-up {
-    animation: flashUp 1s ease;
+/* PANEL */
+.updates-panel{
+    width:260px;
+    display:flex;
+    flex-direction:column;
+    background:linear-gradient(180deg,var(--teal1),var(--teal2));
+    color:white;
+    border-radius:8px;
+    overflow:hidden;
 }
 
-.flash-down {
-    animation: flashDown 1s ease;
+.panel-title{
+    padding:12px;
+    font-size:1.2vw;
+    font-weight:700;
+    text-align:center;
+    background:rgba(0,0,0,0.15);
 }
 
-@keyframes flashUp {
-    0% { text-shadow: 0 0 0px rgba(0,255,153,0); }
-    30% { text-shadow: 0 0 12px rgba(0,255,153,0.9); }
-    100% { text-shadow: 0 0 0px rgba(0,255,153,0); }
+.panel-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding:10px;
+    overflow-y:auto;
 }
 
-@keyframes flashDown {
-    0% { text-shadow: 0 0 0px rgba(255,107,107,0); }
-    30% { text-shadow: 0 0 12px rgba(255,107,107,0.9); }
-    100% { text-shadow: 0 0 0px rgba(255,107,107,0); }
+/* RECENT CHANGES (NO COLOUR-CODING) */
+.update-item{
+    font-size:0.9vw;
+    padding:8px;
+    border-radius:6px;
+    font-weight:800;
+    color:white;
+    background:rgba(255,255,255,0.12);
 }
 
-/* PORTRAIT / MOBILE LAYOUT */
-@media (orientation: portrait), (max-width: 900px) {
+/* MOBILE */
+@media (orientation: portrait), (max-width: 900px){
 
-    body {
+    body{
         overflow:auto;
     }
 
-    .header h1 {
-        font-size: 6vw;
+    /* ---------- HEADER ---------- */
+    .header{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+        gap:6px;
+        padding:14px 10px;
     }
 
-    .header p {
-        font-size: 3vw;
+    .header h1{
+        font-size:6vw;
+        line-height:1.1;
     }
 
-    .updated {
-        font-size: 3.5vw;
+    .header p{
+        font-size:3.5vw;
     }
 
-    /* STACK GRID */
-    .grid {
-        grid-template-columns: 1fr;
-        grid-auto-rows: auto;
-        gap: 12px;
-        padding: 12px;
+    .updated{
+        font-size:4vw;
     }
 
-    /* CARD BECOMES VERTICAL BLOCK */
-    .card {
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: center;
-        min-height: 160px;
-        padding: 14px;
+    .fs-btn{
+        position:absolute;
+        top:10px;
+        right:10px;
     }
 
-    .name {
-        font-size: 6vw;
-        text-align: center;
-        width: 100%;
-        margin-bottom: 10px;
+    /* ---------- LAYOUT ---------- */
+    .main-area{
+        flex-direction:column;
+        padding:10px;
+        gap:12px;
     }
 
-    /* STACK METRICS */
-    .metrics {
-        width: 100%;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        text-align: center;
+    /* ---------- GRID ---------- */
+    .grid{
+        grid-template-columns:1fr;
+        gap:12px;
     }
 
-    .metric {
+    /* ---------- CARDS ---------- */
+    .card{
+        padding:14px;
+        border-radius:10px;
+    }
+
+    .name{
+        font-size:6vw;
+        margin-bottom:10px;
+    }
+
+    .metrics{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .metric{
         display:flex;
-        flex-direction: column;
-        align-items: center;
+        justify-content:space-between;
+        align-items:center;
+        padding:10px 12px;
+        background:rgba(255,255,255,0.12);
+        border-radius:8px;
     }
 
-    .label {
-        font-size: 2.8vw;
-        opacity: 0.85;
+    .label{
+        font-size:3.5vw;
     }
 
-    .value {
-        font-size: 5vw;
+    .value{
+        font-size:5.5vw;
     }
 
-    .change {
-        font-size: 4.5vw;
+    /* ---------- PANEL ---------- */
+    .updates-panel{
+        width:100%;
+        border-radius:10px;
     }
 
-    /* MOBILE HEADER FIX */
-    .header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 6px;
-        padding: 12px 10px;
+    .panel-title{
+        font-size:4.5vw;
+        padding:12px;
     }
 
-    /* TITLE STACK */
-    .header h1 {
-        font-size: 6vw;
-        line-height: 1.1;
+    .panel-list{
+        max-height:45vh;
     }
 
-    .header p {
-        font-size: 3vw;
-        opacity: 0.9;
-    }
-
-    /* UPDATED TIME */
-    .updated {
-        font-size: 3.5vw;
-    }
-
-    /* FULLSCREEN BUTTON POSITION */
-    .fs-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-
-    .fs-btn i {
-        font-size: 18px;
+    .update-item{
+        font-size:3.6vw;
+        padding:10px;
     }
 }
