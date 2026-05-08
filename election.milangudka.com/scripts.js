@@ -1,129 +1,154 @@
 const DATA_URL =
-  "https://r.jina.ai/https://www.bbc.co.uk/news/election/2026/england/results";
+"https://static.files.bbci.co.uk/elections/data/news/election/2026/england/results";
 
-function formatChange(value) {
-  if (value === "--" || value === null || value === undefined) return "--";
-  const num = parseInt(value, 10);
-  if (isNaN(num)) return "--";
-  return (num > 0 ? "+" : "") + num;
-}
-
+/* TIME */
 function updateTime() {
   const now = new Date();
   document.getElementById("time").textContent =
     now.toLocaleTimeString("en-GB");
 }
 
-function extractPartyData(text) {
-  const get = (party) => {
-    const regex = new RegExp(party + ".*?(\\d{1,4})\\s*\\(?([+-]?\\d+)?", "i");
-    const match = text.match(regex);
-
-    return {
-      seats: match ? match[1] : "--",
-      change: match && match[2] ? match[2] : "--"
-    };
-  };
-
-  return {
-    reform: get("Reform"),
-    conservative: get("Conservative"),
-    labour: get("Labour"),
-    libdem: get("Liberal Democrat"),
-    green: get("Green"),
-    independent: get("Independent")
-  };
-}
-
-function applyChange(id, value) {
-  const el = document.getElementById(id);
-
-  const formatted = formatChange(value);
-  el.textContent = formatted;
-
-  el.classList.remove("pos", "neg", "neutral");
-
+/* FORMAT */
+function formatChange(value) {
+  if (value === null || value === undefined) return "--";
   const num = parseInt(value, 10);
-  if (isNaN(num)) {
-    el.classList.add("neutral");
-  } else if (num > 0) {
-    el.classList.add("pos");
-  } else if (num < 0) {
-    el.classList.add("neg");
-  } else {
-    el.classList.add("neutral");
-  }
+  if (isNaN(num)) return "--";
+  return (num > 0 ? "+" : "") + num;
 }
 
+/* PARSE BBC */
+function parseBBC(data) {
+  const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
+
+  const get = (title) => cards.find(c => c.title === title);
+
+  function extract(card) {
+    if (!card) return { seats: "--", councils: "--", change: "--" };
+
+    const seats = card.dataColumnsFormatted?.[1]?.[0] ?? "--";
+    const change = card.dataColumnsFormatted?.[1]?.[1] ?? "--";
+
+    // councils not clearly defined in source → fallback safe attempt
+    const councils = card.dataColumnsFormatted?.[0]?.[0] ?? "--";
+
+    return { seats, councils, change };
+  }
+
+  return [
+    { name: "Reform UK", key: "reform", data: extract(get("Reform UK")) },
+    { name: "Conservative", key: "conservative", data: extract(get("Conservative")) },
+    { name: "Labour", key: "labour", data: extract(get("Labour")) },
+    { name: "Liberal Democrats", key: "libdem", data: extract(get("Liberal Democrat")) },
+    { name: "Green", key: "green", data: extract(get("Green")) },
+    { name: "Independent", key: "independent", data: extract(get("Independents and others")) }
+  ];
+}
+
+/* SORT */
+function sortDescending(parties) {
+  return parties.sort((a, b) => {
+    const aSeats = parseInt(a.data.seats, 10) || 0;
+    const bSeats = parseInt(b.data.seats, 10) || 0;
+    return bSeats - aSeats;
+  });
+}
+
+/* CARD */
+function createCard(party) {
+  const card = document.createElement("section");
+  card.className = `card ${party.key}`;
+
+  card.innerHTML = `
+    <div class="name">${party.name}</div>
+
+    <div class="metrics">
+        <div class="metric">
+            <div class="label">Seats</div>
+            <div class="value">${party.data.seats}</div>
+        </div>
+
+        <div class="metric">
+            <div class="label">Councils</div>
+            <div class="value">${party.data.councils}</div>
+        </div>
+
+        <div class="metric">
+            <div class="label">Change</div>
+            <div class="value change">${formatChange(party.data.change)}</div>
+        </div>
+    </div>
+  `;
+
+  const changeEl = card.querySelector(".change");
+  const num = parseInt(party.data.change, 10);
+
+  changeEl.classList.remove("pos", "neg", "neutral");
+  if (isNaN(num)) changeEl.classList.add("neutral");
+  else if (num > 0) changeEl.classList.add("pos");
+  else if (num < 0) changeEl.classList.add("neg");
+  else changeEl.classList.add("neutral");
+
+  return card;
+}
+
+/* RENDER */
+function render(parties) {
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  parties.forEach(p => {
+    grid.appendChild(createCard(p));
+  });
+}
+
+/* FETCH */
 async function fetchData() {
   try {
-    const res = await fetch(DATA_URL);
-    const text = await res.text();
+    const res = await fetch(DATA_URL, { cache: "no-store" });
+    const json = await res.json();
 
-    const data = extractPartyData(text);
+    let data = parseBBC(json);
+    data = sortDescending(data);
 
-    document.getElementById("reformSeats").textContent = data.reform.seats;
-    document.getElementById("conSeats").textContent = data.conservative.seats;
-    document.getElementById("labSeats").textContent = data.labour.seats;
-    document.getElementById("ldSeats").textContent = data.libdem.seats;
-    document.getElementById("greenSeats").textContent = data.green.seats;
-    document.getElementById("indSeats").textContent = data.independent.seats;
+    render(data);
 
-    applyChange("reformChange", data.reform.change);
-    applyChange("conChange", data.conservative.change);
-    applyChange("labChange", data.labour.change);
-    applyChange("ldChange", data.libdem.change);
-    applyChange("greenChange", data.green.change);
-    applyChange("indChange", data.independent.change);
-
-  } catch (err) {
-    console.error("Fetch error:", err);
+  } catch (e) {
+    console.error("Fetch error:", e);
   }
 }
 
-function updateData() {
+/* LOOP */
+function update() {
   updateTime();
   fetchData();
 }
 
-updateData();
-setInterval(updateData, 10000);
+update();
+setInterval(update, 3000);
 
+/* FULLSCREEN */
 const fsBtn = document.getElementById("fsBtn");
 const icon = fsBtn.querySelector("i");
 
 fsBtn.addEventListener("click", async () => {
   if (!document.fullscreenElement) {
     await document.documentElement.requestFullscreen();
-    icon.classList.remove("fa-expand");
-    icon.classList.add("fa-compress");
+    icon.classList.replace("fa-expand", "fa-compress");
   } else {
     await document.exitFullscreen();
-    icon.classList.remove("fa-compress");
-    icon.classList.add("fa-expand");
+    icon.classList.replace("fa-compress", "fa-expand");
   }
 });
 
-/* =========================
-   AUTO-HIDE CURSOR AFTER 3s
-========================= */
-
+/* CURSOR HIDE */
 let idleTimer;
 
-function showCursor() {
-  document.body.style.cursor = "default";
-}
-
-function hideCursor() {
-  document.body.style.cursor = "none";
-}
-
 function resetIdleTimer() {
-  showCursor();
+  document.body.style.cursor = "default";
   clearTimeout(idleTimer);
 
   idleTimer = setTimeout(() => {
-    hideCursor();
+    document.body.style.cursor = "none";
   }, 3000);
 }
 
