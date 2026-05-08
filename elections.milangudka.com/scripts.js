@@ -6,7 +6,7 @@ const previousValues = {};
 const previousSnapshot = {};
 let updates = [];
 
-const KEEP_MS = 5 * 60 * 1000;
+const KEEP_MS = 2 * 60 * 1000;
 
 /* TIME */
 function updateTime() {
@@ -107,23 +107,25 @@ function renderUpdates() {
 
   list.innerHTML = "";
 
-  updates.forEach(u => {
-    const div = document.createElement("div");
-    div.className = `update-item ${u.key}`;
+  updates
+    .slice()              // avoid mutating original array
+    .reverse()            // newest first
+    .forEach(u => {
+      const div = document.createElement("div");
+      div.className = `update-item ${u.key}`;
 
-    const sign = u.delta > 0 ? "+" : "";
+      const sign = u.delta > 0 ? "+" : "";
 
-    /* IMPORTANT: ONLY indentation is on delta (CSS), NOT spacing here */
-    div.innerHTML = `
-      <span class="rt-time">${u.displayTime}</span>
-      <span class="rt-party">${u.party}</span>
-      <span class="rt-sep">:</span>
-      <span class="rt-delta">${sign}${u.delta}</span>
-    `;
+      div.innerHTML = `
+        <span class="rt-time">${u.displayTime}</span>
+        <span class="rt-party">${u.party}</span>
+        <span class="rt-sep">:</span>
+        <span class="rt-delta">${sign}${u.delta}</span>
+      `;
 
-    u.el = div;
-    list.appendChild(div);
-  });
+      u.el = div;
+      list.appendChild(div);
+    });
 }
 
 /* BBC PARSE */
