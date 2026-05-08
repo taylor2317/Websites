@@ -136,3 +136,111 @@ body{
     30% { text-shadow: 0 0 12px rgba(255,107,107,0.9); }
     100% { text-shadow: 0 0 0px rgba(255,107,107,0); }
 }
+
+/* PORTRAIT / MOBILE LAYOUT */
+@media (orientation: portrait), (max-width: 900px) {
+
+    body {
+        overflow:auto;
+    }
+
+    .header h1 {
+        font-size: 6vw;
+    }
+
+    .header p {
+        font-size: 3vw;
+    }
+
+    .updated {
+        font-size: 3.5vw;
+    }
+
+    /* STACK GRID */
+    .grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    /* CARD BECOMES VERTICAL BLOCK */
+    .card {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        min-height: 160px;
+        padding: 14px;
+    }
+
+    .name {
+        font-size: 6vw;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    /* STACK METRICS */
+    .metrics {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        text-align: center;
+    }
+
+    .metric {
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .label {
+        font-size: 2.8vw;
+        opacity: 0.85;
+    }
+
+    .value {
+        font-size: 5vw;
+    }
+
+    .change {
+        font-size: 4.5vw;
+    }
+
+    /* MOBILE HEADER FIX */
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 6px;
+        padding: 12px 10px;
+    }
+
+    /* TITLE STACK */
+    .header h1 {
+        font-size: 6vw;
+        line-height: 1.1;
+    }
+
+    .header p {
+        font-size: 3vw;
+        opacity: 0.9;
+    }
+
+    /* UPDATED TIME */
+    .updated {
+        font-size: 3.5vw;
+    }
+
+    /* FULLSCREEN BUTTON POSITION */
+    .fs-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .fs-btn i {
+        font-size: 18px;
+    }
+}
