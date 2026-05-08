@@ -318,6 +318,7 @@ async function fetchData() {
     let data = parseBBC(json);
 
     data = sortDescending(data);
+    updateCountedStats(data);
 
     render(data);
 
@@ -361,3 +362,21 @@ fsBtn.addEventListener("click", () => {
 
   }
 });
+
+const TOTAL_SEATS = 5066;
+
+function updateCountedStats(data) {
+
+  const counted =
+    data.reduce(
+      (total, p) => total + toNumber(p.data.seats),
+      0
+    );
+
+  const percent =
+    ((counted / TOTAL_SEATS) * 100)
+      .toFixed(1);
+
+  document.getElementById("countedStats").textContent =
+    `${counted.toLocaleString("en-GB")}/5,066 seats counted - ${percent}%`;
+}
