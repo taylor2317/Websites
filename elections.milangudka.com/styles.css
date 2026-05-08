@@ -126,16 +126,14 @@ body{
     flex-direction:column;
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
-    border-radius:8px;
-    overflow:hidden;
+    overflow-y: auto;
 }
 
 .panel-title{
     padding:12px;
-    font-size:1.2vw;
+    font-size:1.5vw;
     font-weight:700;
     text-align:center;
-    background:rgba(0,0,0,0.15);
 }
 
 .panel-list{
