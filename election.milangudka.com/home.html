@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Election Dashboard</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header class="header">
+        <div>
+            <h1>GB UK Local Elections 2026</h1>
+            <p>Live England council results</p>
+        </div>
+
+        <div class="updated">
+            Updated: <span id="time">--:--:--</span>
+        </div>
+
+        <button id="fsBtn" class="fs-btn" aria-label="Fullscreen">
+            <i class="fas fa-expand"></i>
+        </button>
+    </header>
+
+    <main class="grid">
+
+        <section class="card reform">
+            <div class="name">Reform UK</div>
+            <div class="bottom">
+                <div class="seats" id="reformSeats">--</div>
+                <div class="change" id="reformChange">--</div>
+            </div>
+        </section>
+
+        <section class="card conservative">
+            <div class="name">Conservative</div>
+            <div class="bottom">
+                <div class="seats" id="conSeats">--</div>
+                <div class="change" id="conChange">--</div>
+            </div>
+        </section>
+
+        <section class="card labour">
+            <div class="name">Labour</div>
+            <div class="bottom">
+                <div class="seats" id="labSeats">--</div>
+                <div class="change" id="labChange">--</div>
+            </div>
+        </section>
+
+        <section class="card libdem">
+            <div class="name">Liberal Democrats</div>
+            <div class="bottom">
+                <div class="seats" id="ldSeats">--</div>
+                <div class="change" id="ldChange">--</div>
+            </div>
+        </section>
+
+        <section class="card green">
+            <div class="name">Green</div>
+            <div class="bottom">
+                <div class="seats" id="greenSeats">--</div>
+                <div class="change" id="greenChange">--</div>
+            </div>
+        </section>
+
+        <section class="card independent">
+            <div class="name">Independent</div>
+            <div class="bottom">
+                <div class="seats" id="indSeats">--</div>
+                <div class="change" id="indChange">--</div>
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="scripts.js"></script>
+<script src="https://kit.fontawesome.com/7e891fcb86.js" crossorigin="anonymous"></script>
+</body>
+</html>

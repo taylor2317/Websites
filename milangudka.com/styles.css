@@ -25,6 +25,12 @@
     --gradient-teal-accent: linear-gradient(to bottom right, var(--color-primary), var(--color-primary-light));
 }
 
+*,
+*::before,
+*::after {
+    transition: 0.5s;
+}
+
 body {
     margin: 0px;
     position: absolute;
@@ -33,7 +39,7 @@ body {
     overflow-x: hidden;
     height: 100vh;
     width: 100vw;
-    transition: 0.5s;
+    
     font-size: small;
 }
 
@@ -117,7 +123,7 @@ hr {
     padding-left: 2%;
     padding-right: 2%;
     line-height: 300%;
-    transition: 0.2s;
+    ;
 }
 
 .welcome {
@@ -131,7 +137,7 @@ hr {
     margin-top: 2%;
     color: var(--color-primary);
     line-height: 300%;
-    transition: 0.2s;
+    ;
 }
 
 .welcome p {
@@ -159,7 +165,7 @@ hr {
     margin-top: 5%;
     padding: 1%;
     border-radius: 20px;
-    transition: 0.2s;
+    ;
 }
 
 .homeCards {
@@ -169,7 +175,7 @@ hr {
     padding:2%;
     text-align: center;
     border-radius: 20px;
-    transition: 0.2s;
+    ;
 }
 
 .homeCards h2 {
@@ -300,7 +306,6 @@ price {
     box-shadow: 2px 2px 10px var(--color-light-grey);
     margin-bottom: 5%;
     overflow-x: hidden;
-    transition: 0.3s ease;
 }
 
 .card i, .portCard i, .soloCard i {
@@ -347,7 +352,7 @@ price {
     margin: 1%;
     height: max-content;
     white-space: nowrap;
-    transition: 0.5s;
+    
 }
 
 .keyTag {
@@ -362,7 +367,7 @@ price {
     font-weight: bold;
     height: max-content;
     white-space: nowrap;
-    transition: 0.5s;
+    
 }
 
 
@@ -487,7 +492,7 @@ price {
     width: 80%;
     background-color: var(--color-white);
     border-radius: 20px;
-    transition: 0.5s;
+    
     color: var(--color-primary);
 }
 
@@ -511,7 +516,6 @@ form input, form textarea, form button {
     border: 2px solid #e0e0e0;
     padding: 8px 12px;
     font-size: 0.9rem;
-    transition: all 0.3s ease;
     margin: 3px 0 3px 1%;
 }
 
@@ -584,7 +588,6 @@ form button:active {
     text-align: right;
     font-size: larger;
     color: var(--color-white);
-    transition: color 0.3s ease;
     display: inline-block;
 }
 
@@ -665,7 +668,7 @@ form button:active {
 
 .popup a img {
     height: 4vh;
-    transition: 0.5s;
+    
 }
 
 .fa-xmark {
@@ -675,7 +678,7 @@ form button:active {
     color: var(--color-accent-red);
     left: 0;
     width: 100%;
-    transition: 0.2s;
+    ;
 }
 
 .popupImg {
@@ -699,6 +702,7 @@ form button:active {
 .dots i {
     margin-left: 0.25%;
     margin-right: 0.25%;
+    cursor: pointer;
 }
 
 .dots i.active {
@@ -718,7 +722,7 @@ form button:active {
 }
 
 .popupArrows i {
-    transition: 0.5s;
+    
 }
 
 .fa-chevron-left {
@@ -795,7 +799,7 @@ form button:active {
 
 @media (min-width:800px) {
     body, a, html {
-        transition: 0.5s;
+        
         user-select: none;
         font-size: 100%;
     }
@@ -863,14 +867,13 @@ form button:active {
     }
 
     .cv {
-        transition: 0.5s;
+        
     }
 
     .card:hover, .portCard:hover, .soloCard:hover {
         background-color: var(--color-medium-grey);
         box-shadow: 0px 15px 30px #999;
         transform: translateY(-8px);
-        transition: 0.3s ease;
     }
 
     .card:hover i, .portCard:hover i, .soloCard:hover i, .project h2 i:hover {
@@ -896,7 +899,7 @@ form button:active {
         border-radius: 20px;
         border: var(--color-light-grey) solid 1px;
         box-shadow: 2px 2px 10px var(--color-light-grey);
-        transition: 0.5s;
+        
         margin-bottom: -1%;
         color: black;
         text-decoration: none;
@@ -988,7 +991,7 @@ form button:active {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        transition: 0.5s;
+        
         position: sticky;
         top: 0px;
         box-shadow: 2px 2px 10px var(--color-primary);
@@ -1116,7 +1119,7 @@ form button:active {
 
     .popupArrows i:hover {
         font-size: 110%;
-        transition: 0.2s;
+        ;
         text-shadow: 0px 0px 10px var(--color-secondary);
     }
 }
