@@ -17,6 +17,7 @@ body{
     background:var(--bg);
     height:100vh;
     overflow:hidden;
+    cursor:default;
 }
 
 /* HEADER */
@@ -90,9 +91,7 @@ body{
     gap:10px;
 }
 
-.metric{
-    text-align:center;
-}
+.metric{text-align:center;}
 
 .label{
     font-size:1vw;
@@ -104,6 +103,7 @@ body{
     font-weight:800;
 }
 
+/* CHANGE */
 .pos{color:#00ff99;}
 .neg{color:#ff4d4d;}
 .neutral{color:#e0e0e0;}
@@ -121,12 +121,13 @@ body{
 /* PANEL */
 .updates-panel{
     width:260px;
+    max-height:82vh;
     display:flex;
     flex-direction:column;
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
-    border-radius:8px;
-    overflow:hidden;
+    scrollbar-width:thin;
+    scrollbar-color: var(--bg) transparent;
 }
 
 .panel-title{
@@ -134,7 +135,6 @@ body{
     font-size:1.2vw;
     font-weight:700;
     text-align:center;
-    background:rgba(0,0,0,0.15);
 }
 
 .panel-list{
@@ -145,29 +145,70 @@ body{
     overflow-y:auto;
 }
 
-/* RECENT CHANGES */
+/* UPDATE ITEM — FIXED SPACING */
 .update-item{
     display:flex;
-    gap:12px;
     align-items:center;
 
     font-size:0.9vw;
     padding:8px;
     border-radius:6px;
-    font-weight:800;
+
     color:white;
     background:rgba(255,255,255,0.12);
 
     border-left:6px solid transparent;
+    animation:fadeIn 0.25s ease;
+
+    gap:0; /* IMPORTANT: removes flex spacing */
 }
 
-/* PARTY COLOURED LEFT BORDER */
+/* ONLY ONE CONTROLLED GAP: time → party */
+.rt-time{
+    font-weight:800;
+    margin-right:8px; /* ONLY spacing allowed */
+}
+
+.rt-party{
+    font-weight:800;
+    margin-left:20px;
+}
+
+.rt-sep{
+    margin-right:3px;        /* NO spacing around colon */
+    padding:0;
+    font-weight:600;
+    opacity:0.8;
+}
+
+.rt-delta{
+    font-weight:400;
+    margin-left:0;
+    white-space:nowrap;
+}
+
+/* PARTY BORDERS */
 .update-item.reform{border-left-color:#1fb7c9;}
 .update-item.conservative{border-left-color:#1a8fe3;}
 .update-item.labour{border-left-color:#e6003c;}
 .update-item.libdem{border-left-color:#f5a623;}
 .update-item.green{border-left-color:#6bb321;}
 .update-item.independent{border-left-color:#7a7a7a;}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {opacity:0; transform:translateY(6px);}
+    to {opacity:1; transform:translateY(0);}
+}
+
+@keyframes fadeOut {
+    from {opacity:1;}
+    to {opacity:0; transform:translateY(-6px);}
+}
+
+.update-item.removing{
+    animation:fadeOut 0.4s ease forwards;
+}
 
 /* MOBILE */
 @media (orientation: portrait), (max-width: 900px){

@@ -4,8 +4,9 @@ const DATA_URL =
 /* STATE */
 const previousValues = {};
 const previousSnapshot = {};
-const updates = [];
-const MAX_UPDATES = 200;
+let updates = [];
+
+const KEEP_MS = 5 * 60 * 1000;
 
 /* TIME */
 function updateTime() {
@@ -19,40 +20,36 @@ function updateTime() {
     });
 }
 
-/* ANIMATION */
-function animateChange(el, newValue, key) {
-  const oldValue = previousValues[key];
+/* CARD ANIMATION */
+function animateChange(el, value, key) {
+  const old = previousValues[key];
 
-  el.textContent = newValue;
+  el.textContent = value;
 
-  if (oldValue === undefined || oldValue === newValue) {
-    previousValues[key] = newValue;
-    return;
+  if (old !== undefined && old !== value) {
+    el.classList.remove("updated");
+    void el.offsetWidth;
+    el.classList.add("updated");
   }
 
-  el.classList.remove("updated");
-  void el.offsetWidth;
-  el.classList.add("updated");
-
-  previousValues[key] = newValue;
+  previousValues[key] = value;
 }
 
 /* FORMAT CHANGE */
-function formatChange(value) {
-  const num = parseInt(value, 10);
-  if (isNaN(num)) return { text: "--", type: "neutral" };
+function formatChange(v) {
+  const n = parseInt(v, 10);
 
-  if (num > 0) return { text: `+${num}`, type: "pos" };
-  if (num < 0) return { text: `${num}`, type: "neg" };
-
+  if (isNaN(n)) return { text: "--", type: "neutral" };
+  if (n > 0) return { text: `+${n}`, type: "pos" };
+  if (n < 0) return { text: `${n}`, type: "neg" };
   return { text: "0", type: "neutral" };
 }
 
-/* RECENT UPDATES */
-function addUpdate(party, currentSeats, key) {
+/* UPDATE TRACKING */
+function addUpdate(party, seats, key) {
   const now = Date.now();
+  const curr = parseInt(seats, 10);
 
-  const curr = parseInt(currentSeats, 10);
   if (isNaN(curr)) return;
 
   const prev = previousSnapshot[party];
@@ -65,7 +62,8 @@ function addUpdate(party, currentSeats, key) {
   const delta = curr - prev;
   if (delta === 0) return;
 
-  updates.unshift({
+  updates.push({
+    id: now + Math.random(),
     time: now,
     displayTime: new Date(now).toLocaleTimeString("en-GB", {
       hour: "2-digit",
@@ -76,11 +74,30 @@ function addUpdate(party, currentSeats, key) {
     key
   });
 
-  if (updates.length > MAX_UPDATES) updates.pop();
-
   previousSnapshot[party] = curr;
 
   renderUpdates();
+}
+
+/* CLEAN OLD ENTRIES */
+function cleanupUpdates() {
+  const now = Date.now();
+
+  updates = updates.filter(u => now - u.time < KEEP_MS + 4000);
+
+  updates.forEach(u => {
+    if (!u.el) return;
+
+    if (now - u.time > KEEP_MS && !u.fading) {
+      u.fading = true;
+      u.el.classList.add("removing");
+
+      setTimeout(() => {
+        updates = updates.filter(x => x.id !== u.id);
+        renderUpdates();
+      }, 400);
+    }
+  });
 }
 
 /* RENDER UPDATES */
@@ -88,60 +105,73 @@ function renderUpdates() {
   const list = document.getElementById("updatesList");
   if (!list) return;
 
-  const cutoff = Date.now() - 5 * 60 * 1000;
-
   list.innerHTML = "";
 
-  updates
-    .filter(u => u.time >= cutoff)
-    .reverse()
-    .forEach(u => {
-      const div = document.createElement("div");
+  updates.forEach(u => {
+    const div = document.createElement("div");
+    div.className = `update-item ${u.key}`;
 
-      const sign = u.delta > 0 ? "+" : "";
-      div.className = `update-item ${u.key}`;
+    const sign = u.delta > 0 ? "+" : "";
 
-      div.innerHTML = `
-        <span>${u.displayTime}</span>
-        <span>${u.party}: ${sign}${u.delta}</span>
-      `;
+    /* IMPORTANT: ONLY indentation is on delta (CSS), NOT spacing here */
+    div.innerHTML = `
+      <span class="rt-time">${u.displayTime}</span>
+      <span class="rt-party">${u.party}</span>
+      <span class="rt-sep">:</span>
+      <span class="rt-delta">${sign}${u.delta}</span>
+    `;
 
-      list.appendChild(div);
-    });
+    u.el = div;
+    list.appendChild(div);
+  });
 }
 
-/* PARSE */
+/* BBC PARSE */
 function parseBBC(data) {
   const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
+  const get = t => cards.find(c => c.title === t);
 
-  const get = (title) => cards.find(c => c.title === title);
-
-  function extract(card) {
-    if (!card) return { seats: "--", councils: "--", change: "--" };
-
-    return {
-      seats: card.dataColumnsFormatted?.[1]?.[0] ?? "--",
-      councils: card.dataColumnsFormatted?.[0]?.[0] ?? "--",
-      change: card.dataColumnsFormatted?.[1]?.[1] ?? "--"
-    };
-  }
+  const extract = c => ({
+    seats: c?.dataColumnsFormatted?.[1]?.[0] ?? "--",
+    change: c?.dataColumnsFormatted?.[1]?.[1] ?? "--"
+  });
 
   return [
-    { name: "Reform UK", key: "reform", data: extract(get("Reform UK")) },
-    { name: "Conservative", key: "conservative", data: extract(get("Conservative")) },
-    { name: "Labour", key: "labour", data: extract(get("Labour")) },
-    { name: "Liberal Democrats", key: "libdem", data: extract(get("Liberal Democrat")) },
-    { name: "Green", key: "green", data: extract(get("Green")) },
-    { name: "Independent", key: "independent", data: extract(get("Independents and others")) }
+    { name:"Reform UK", key:"reform", data:extract(get("Reform UK")) },
+    { name:"Conservative", key:"conservative", data:extract(get("Conservative")) },
+    { name:"Labour", key:"labour", data:extract(get("Labour")) },
+    { name:"Liberal Democrats", key:"libdem", data:extract(get("Liberal Democrat")) },
+    { name:"Green", key:"green", data:extract(get("Green")) },
+    { name:"Independent", key:"independent", data:extract(get("Independents and others")) }
   ];
 }
 
 /* SORT */
 function sortDescending(data) {
-  return data.sort((a, b) =>
-    (parseInt(b.data.seats, 10) || 0) - (parseInt(a.data.seats, 10) || 0)
+  return data.sort(
+    (a,b) =>
+      (parseInt(b.data.seats,10)||0) -
+      (parseInt(a.data.seats,10)||0)
   );
 }
+
+/* CURSOR HIDE (FIXED) */
+let idleTimer;
+
+function resetCursor() {
+  document.body.style.cursor = "default";
+
+  clearTimeout(idleTimer);
+
+  idleTimer = setTimeout(() => {
+    document.body.style.cursor = "none";
+  }, 3000);
+}
+
+["mousemove","mousedown","keydown","touchstart","scroll"]
+  .forEach(e => window.addEventListener(e, resetCursor, { passive:true }));
+
+resetCursor();
 
 /* CARD */
 function createCard(p) {
@@ -160,71 +190,49 @@ function createCard(p) {
       </div>
 
       <div class="metric">
-        <div class="label">Councils</div>
-        <div class="value councils"></div>
-      </div>
-
-      <div class="metric">
         <div class="label">Change</div>
         <div class="value change ${change.type}"></div>
       </div>
     </div>
   `;
 
-  const seatsEl = card.querySelector(".seats");
-  const councilsEl = card.querySelector(".councils");
-  const changeEl = card.querySelector(".change");
-
-  animateChange(seatsEl, p.data.seats, p.key + "_seats");
-  animateChange(councilsEl, p.data.councils, p.key + "_councils");
-  animateChange(changeEl, change.text, p.key + "_change");
+  animateChange(card.querySelector(".seats"), p.data.seats, p.key+"_s");
+  animateChange(card.querySelector(".change"), change.text, p.key+"_c");
 
   addUpdate(p.name, p.data.seats, p.key);
 
   return card;
 }
 
-/* RENDER */
+/* RENDER GRID */
 function render(data) {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
-
   data.forEach(p => grid.appendChild(createCard(p)));
 }
 
-/* FETCH LOOP */
+/* FETCH */
 async function fetchData() {
   try {
-    const res = await fetch(DATA_URL, { cache: "no-store" });
+    const res = await fetch(DATA_URL, { cache:"no-store" });
     const json = await res.json();
 
     let data = parseBBC(json);
     data = sortDescending(data);
 
     render(data);
+
   } catch (e) {
     console.error(e);
   }
 }
 
+/* LOOP */
 function tick() {
   updateTime();
   fetchData();
+  cleanupUpdates();
 }
 
 tick();
 setInterval(tick, 3000);
-
-/* FULLSCREEN */
-const fsBtn = document.getElementById("fsBtn");
-const icon = fsBtn.querySelector("i");
-
-fsBtn.addEventListener("click", async () => {
-  if (!document.fullscreenElement) {
-    await document.documentElement.requestFullscreen();
-    icon.classList.replace("fa-expand", "fa-compress");
-  } else {
-    await document.exitFullscreen();
-    icon.classList.replace("fa-compress", "fa-expand");
-  }
-});
