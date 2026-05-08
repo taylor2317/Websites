@@ -107,6 +107,7 @@ function cleanupUpdates() {
 /* RENDER UPDATES */
 function renderUpdates() {
   const list = document.getElementById("updatesList");
+
   if (!list) return;
 
   list.innerHTML = "";
@@ -115,6 +116,7 @@ function renderUpdates() {
     .slice()
     .reverse()
     .forEach(u => {
+
       const div = document.createElement("div");
 
       div.className = `update-item ${u.key}`;
@@ -136,11 +138,15 @@ function renderUpdates() {
 
 /* BBC PARSE */
 function parseBBC(data) {
-  const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
 
-  const get = t => cards.find(c => c.title === t);
+  const cards =
+    data?.scoreboard?.groups?.[0]?.scorecards || [];
+
+  const get = t =>
+    cards.find(c => c.title === t);
 
   const extract = c => ({
+    councils: c?.dataColumnsFormatted?.[0]?.[0] ?? "--",
     seats: c?.dataColumnsFormatted?.[1]?.[0] ?? "--",
     change: c?.dataColumnsFormatted?.[1]?.[1] ?? "--"
   });
@@ -197,6 +203,7 @@ function sortDescending(data) {
 let idleTimer;
 
 function resetCursor() {
+
   document.body.style.cursor = "default";
 
   clearTimeout(idleTimer);
@@ -206,20 +213,32 @@ function resetCursor() {
   }, 3000);
 }
 
-["mousemove","mousedown","keydown","touchstart","scroll"]
-  .forEach(e =>
-    window.addEventListener(e, resetCursor, { passive:true })
-  );
+[
+  "mousemove",
+  "mousedown",
+  "keydown",
+  "touchstart",
+  "scroll"
+].forEach(e =>
+  window.addEventListener(
+    e,
+    resetCursor,
+    { passive:true }
+  )
+);
 
 resetCursor();
 
 /* CARD */
 function createCard(p) {
-  const card = document.createElement("section");
+
+  const card =
+    document.createElement("section");
 
   card.className = `card ${p.key}`;
 
-  const change = formatChange(p.data.change);
+  const change =
+    formatChange(p.data.change);
 
   card.innerHTML = `
     <div class="name">${p.name}</div>
@@ -229,6 +248,11 @@ function createCard(p) {
       <div class="metric">
         <div class="label">Seats</div>
         <div class="value seats"></div>
+      </div>
+
+      <div class="metric">
+        <div class="label">Councils</div>
+        <div class="value councils"></div>
       </div>
 
       <div class="metric">
@@ -246,31 +270,48 @@ function createCard(p) {
   );
 
   animateChange(
+    card.querySelector(".councils"),
+    p.data.councils,
+    p.key + "_co"
+  );
+
+  animateChange(
     card.querySelector(".change"),
     change.text,
     p.key + "_c"
   );
 
-  addUpdate(p.name, p.data.seats, p.key);
+  addUpdate(
+    p.name,
+    p.data.seats,
+    p.key
+  );
 
   return card;
 }
 
 /* RENDER GRID */
 function render(data) {
-  const grid = document.getElementById("grid");
+
+  const grid =
+    document.getElementById("grid");
 
   grid.innerHTML = "";
 
-  data.forEach(p => grid.appendChild(createCard(p)));
+  data.forEach(p =>
+    grid.appendChild(createCard(p))
+  );
 }
 
 /* FETCH */
 async function fetchData() {
+
   try {
-    const res = await fetch(DATA_URL, {
-      cache:"no-store"
-    });
+
+    const res = await fetch(
+      DATA_URL,
+      { cache:"no-store" }
+    );
 
     const json = await res.json();
 
@@ -281,14 +322,19 @@ async function fetchData() {
     render(data);
 
   } catch (e) {
+
     console.error(e);
+
   }
 }
 
 /* LOOP */
 function tick() {
+
   updateTime();
+
   fetchData();
+
   cleanupUpdates();
 }
 
@@ -297,14 +343,21 @@ tick();
 setInterval(tick, 3000);
 
 /* FULLSCREEN */
-const fsBtn = document.getElementById("fsBtn");
+const fsBtn =
+  document.getElementById("fsBtn");
 
 fsBtn.addEventListener("click", () => {
-  const doc = document.documentElement;
+
+  const doc =
+    document.documentElement;
 
   if (!document.fullscreenElement) {
+
     doc.requestFullscreen?.();
+
   } else {
+
     document.exitFullscreen?.();
+
   }
 });
