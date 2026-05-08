@@ -122,7 +122,6 @@ body{
 /* PANEL */
 .updates-panel{
     width:260px;
-    max-height: 82vh;
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
     scrollbar-width:thin;
