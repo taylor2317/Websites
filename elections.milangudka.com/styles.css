@@ -39,7 +39,11 @@ body{
     border:none;
     cursor:pointer;
 }
-.fs-btn i{font-size:20px; color:white;}
+
+.fs-btn i{
+    font-size:20px;
+    color:white;
+}
 
 /* LAYOUT */
 .dashboard{
@@ -53,7 +57,7 @@ body{
     flex:1;
     gap:10px;
     padding:10px;
-    align-items: stretch;
+    align-items:stretch;
 }
 
 /* GRID */
@@ -92,7 +96,9 @@ body{
     gap:10px;
 }
 
-.metric{text-align:center;}
+.metric{
+    text-align:center;
+}
 
 .label{
     font-size:1vw;
@@ -109,7 +115,7 @@ body{
 .neg{color:#ff4d4d;}
 .neutral{color:#e0e0e0;}
 
-@keyframes pop {
+@keyframes pop{
     0%{transform:scale(1);}
     40%{transform:scale(1.25);}
     100%{transform:scale(1);}
@@ -125,10 +131,11 @@ body{
     background:linear-gradient(180deg,var(--teal1),var(--teal2));
     color:white;
     scrollbar-width:thin;
-    scrollbar-color: var(--bg) transparent;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    scrollbar-color:var(--bg) transparent;
+
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
 }
 
 .panel-title{
@@ -146,7 +153,7 @@ body{
     overflow-y:auto;
 }
 
-/* UPDATE ITEM — FIXED SPACING */
+/* UPDATE ITEM */
 .update-item{
     display:flex;
     align-items:center;
@@ -159,15 +166,24 @@ body{
     background:rgba(255,255,255,0.12);
 
     border-left:6px solid transparent;
-    animation:fadeIn 0.25s ease;
 
-    gap:0; /* IMPORTANT: removes flex spacing */
+    /* smooth repositioning of old items */
+    transition:
+        transform 420ms cubic-bezier(0.22,1,0.36,1),
+        opacity 320ms ease;
+
+    will-change:transform, opacity;
+
+    gap:0;
+
+    /* NEW ITEMS ANIMATE IN */
+    animation:slideIn 420ms cubic-bezier(0.22,1,0.36,1);
 }
 
-/* ONLY ONE CONTROLLED GAP: time → party */
+/* controlled spacing */
 .rt-time{
     font-weight:800;
-    margin-right:8px; /* ONLY spacing allowed */
+    margin-right:8px;
 }
 
 .rt-party{
@@ -176,7 +192,7 @@ body{
 }
 
 .rt-sep{
-    margin-right:3px;        /* NO spacing around colon */
+    margin-right:3px;
     padding:0;
     font-weight:600;
     opacity:0.8;
@@ -196,19 +212,39 @@ body{
 .update-item.green{border-left-color:#6bb321;}
 .update-item.independent{border-left-color:#7a7a7a;}
 
-/* ANIMATION */
-@keyframes fadeIn {
-    from {opacity:0; transform:translateY(6px);}
-    to {opacity:1; transform:translateY(0);}
+/* NEW ITEMS SLIDE IN */
+@keyframes slideIn{
+    0%{
+        opacity:0;
+        transform:translateY(-18px);
+    }
+
+    100%{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
-@keyframes fadeOut {
-    from {opacity:1;}
-    to {opacity:0; transform:translateY(-6px);}
+/* OLD ITEMS SLIDE DOWN NATURALLY */
+.panel-list > .update-item{
+    transform:translateY(0);
+}
+
+/* REMOVE ANIMATION */
+@keyframes fadeOut{
+    0%{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+    100%{
+        opacity:0;
+        transform:translateY(-10px);
+    }
 }
 
 .update-item.removing{
-    animation:fadeOut 0.4s ease forwards;
+    animation:fadeOut 300ms ease forwards;
 }
 
 /* MOBILE */
@@ -218,7 +254,7 @@ body{
         overflow:auto;
     }
 
-    /* ---------- HEADER ---------- */
+    /* HEADER */
     .header{
         flex-direction:column;
         align-items:center;
@@ -246,20 +282,20 @@ body{
         right:10px;
     }
 
-    /* ---------- LAYOUT ---------- */
+    /* LAYOUT */
     .main-area{
         flex-direction:column;
         padding:10px;
         gap:12px;
     }
 
-    /* ---------- GRID ---------- */
+    /* GRID */
     .grid{
         grid-template-columns:1fr;
         gap:12px;
     }
 
-    /* ---------- CARDS ---------- */
+    /* CARDS */
     .card{
         padding:14px;
         border-radius:10px;
@@ -292,7 +328,7 @@ body{
         font-size:5.5vw;
     }
 
-    /* ---------- PANEL ---------- */
+    /* PANEL */
     .updates-panel{
         width:100%;
         border-radius:10px;
