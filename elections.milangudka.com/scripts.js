@@ -8,6 +8,11 @@ let updates = [];
 
 const KEEP_MS = 2 * 60 * 1000;
 
+/* NUMBER PARSER */
+function toNumber(value) {
+  return parseInt(String(value).replace(/,/g, ""), 10) || 0;
+}
+
 /* TIME */
 function updateTime() {
   const now = new Date();
@@ -37,7 +42,7 @@ function animateChange(el, value, key) {
 
 /* FORMAT CHANGE */
 function formatChange(v) {
-  const n = parseInt(v, 10);
+  const n = toNumber(v);
 
   if (isNaN(n)) return { text: "--", type: "neutral" };
   if (n > 0) return { text: `+${n}`, type: "pos" };
@@ -48,9 +53,7 @@ function formatChange(v) {
 /* UPDATE TRACKING */
 function addUpdate(party, seats, key) {
   const now = Date.now();
-  const curr = parseInt(seats, 10);
-
-  if (isNaN(curr)) return;
+  const curr = toNumber(seats);
 
   const prev = previousSnapshot[party];
 
@@ -60,6 +63,7 @@ function addUpdate(party, seats, key) {
   }
 
   const delta = curr - prev;
+
   if (delta === 0) return;
 
   updates.push({
@@ -108,10 +112,11 @@ function renderUpdates() {
   list.innerHTML = "";
 
   updates
-    .slice()              // avoid mutating original array
-    .reverse()            // newest first
+    .slice()
+    .reverse()
     .forEach(u => {
       const div = document.createElement("div");
+
       div.className = `update-item ${u.key}`;
 
       const sign = u.delta > 0 ? "+" : "";
@@ -124,6 +129,7 @@ function renderUpdates() {
       `;
 
       u.el = div;
+
       list.appendChild(div);
     });
 }
@@ -131,6 +137,7 @@ function renderUpdates() {
 /* BBC PARSE */
 function parseBBC(data) {
   const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
+
   const get = t => cards.find(c => c.title === t);
 
   const extract = c => ({
@@ -139,25 +146,54 @@ function parseBBC(data) {
   });
 
   return [
-    { name:"Reform UK", key:"reform", data:extract(get("Reform UK")) },
-    { name:"Conservative", key:"conservative", data:extract(get("Conservative")) },
-    { name:"Labour", key:"labour", data:extract(get("Labour")) },
-    { name:"Liberal Democrats", key:"libdem", data:extract(get("Liberal Democrat")) },
-    { name:"Green", key:"green", data:extract(get("Green")) },
-    { name:"Independent", key:"independent", data:extract(get("Independents and others")) }
+    {
+      name:"Reform UK",
+      key:"reform",
+      data:extract(get("Reform UK"))
+    },
+
+    {
+      name:"Conservative",
+      key:"conservative",
+      data:extract(get("Conservative"))
+    },
+
+    {
+      name:"Labour",
+      key:"labour",
+      data:extract(get("Labour"))
+    },
+
+    {
+      name:"Liberal Democrats",
+      key:"libdem",
+      data:extract(get("Liberal Democrat"))
+    },
+
+    {
+      name:"Green",
+      key:"green",
+      data:extract(get("Green"))
+    },
+
+    {
+      name:"Independent",
+      key:"independent",
+      data:extract(get("Independents and others"))
+    }
   ];
 }
 
 /* SORT */
 function sortDescending(data) {
   return data.sort(
-    (a,b) =>
-      (parseInt(b.data.seats,10)||0) -
-      (parseInt(a.data.seats,10)||0)
+    (a, b) =>
+      toNumber(b.data.seats) -
+      toNumber(a.data.seats)
   );
 }
 
-/* CURSOR HIDE (FIXED) */
+/* CURSOR HIDE */
 let idleTimer;
 
 function resetCursor() {
@@ -171,13 +207,16 @@ function resetCursor() {
 }
 
 ["mousemove","mousedown","keydown","touchstart","scroll"]
-  .forEach(e => window.addEventListener(e, resetCursor, { passive:true }));
+  .forEach(e =>
+    window.addEventListener(e, resetCursor, { passive:true })
+  );
 
 resetCursor();
 
 /* CARD */
 function createCard(p) {
   const card = document.createElement("section");
+
   card.className = `card ${p.key}`;
 
   const change = formatChange(p.data.change);
@@ -186,6 +225,7 @@ function createCard(p) {
     <div class="name">${p.name}</div>
 
     <div class="metrics">
+
       <div class="metric">
         <div class="label">Seats</div>
         <div class="value seats"></div>
@@ -195,11 +235,21 @@ function createCard(p) {
         <div class="label">Change</div>
         <div class="value change ${change.type}"></div>
       </div>
+
     </div>
   `;
 
-  animateChange(card.querySelector(".seats"), p.data.seats, p.key+"_s");
-  animateChange(card.querySelector(".change"), change.text, p.key+"_c");
+  animateChange(
+    card.querySelector(".seats"),
+    p.data.seats,
+    p.key + "_s"
+  );
+
+  animateChange(
+    card.querySelector(".change"),
+    change.text,
+    p.key + "_c"
+  );
 
   addUpdate(p.name, p.data.seats, p.key);
 
@@ -209,17 +259,23 @@ function createCard(p) {
 /* RENDER GRID */
 function render(data) {
   const grid = document.getElementById("grid");
+
   grid.innerHTML = "";
+
   data.forEach(p => grid.appendChild(createCard(p)));
 }
 
 /* FETCH */
 async function fetchData() {
   try {
-    const res = await fetch(DATA_URL, { cache:"no-store" });
+    const res = await fetch(DATA_URL, {
+      cache:"no-store"
+    });
+
     const json = await res.json();
 
     let data = parseBBC(json);
+
     data = sortDescending(data);
 
     render(data);
@@ -237,8 +293,10 @@ function tick() {
 }
 
 tick();
+
 setInterval(tick, 3000);
 
+/* FULLSCREEN */
 const fsBtn = document.getElementById("fsBtn");
 
 fsBtn.addEventListener("click", () => {
