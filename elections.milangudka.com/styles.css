@@ -347,4 +347,33 @@ body{
         font-size:3.6vw;
         padding:10px;
     }
+
+    .seat-share-number{
+    font-size:5.5vw;
+    }
+
+    .seat-share-label{
+        font-size:3.5vw;
+    }
+}
+
+.seat-share{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    margin:0.6vh 0;
+}
+
+.seat-share-number{
+    font-size:2.5vw;
+    font-weight:800;
+    line-height:1;
+}
+
+.seat-share-label{
+    margin-top:4px;
+    font-size:1vw;
+    opacity:0.85;
 }

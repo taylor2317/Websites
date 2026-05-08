@@ -1,6 +1,9 @@
 const DATA_URL =
 "https://static.files.bbci.co.uk/elections/data/news/election/2026/england/results";
 
+/* CONSTANTS */
+const TOTAL_SEATS = 5066;
+
 /* STATE */
 const previousValues = {};
 const previousSnapshot = {};
@@ -10,30 +13,46 @@ const KEEP_MS = 2 * 60 * 1000;
 
 /* NUMBER PARSER */
 function toNumber(value) {
-  return parseInt(String(value).replace(/,/g, ""), 10) || 0;
+
+  return parseInt(
+    String(value).replace(/,/g, ""),
+    10
+  ) || 0;
 }
 
 /* TIME */
 function updateTime() {
+
   const now = new Date();
 
   document.getElementById("time").textContent =
-    now.toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
+    now.toLocaleTimeString(
+      "en-GB",
+      {
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit"
+      }
+    );
 }
 
 /* CARD ANIMATION */
 function animateChange(el, value, key) {
-  const old = previousValues[key];
+
+  const old =
+    previousValues[key];
 
   el.textContent = value;
 
-  if (old !== undefined && old !== value) {
+  if (
+    old !== undefined &&
+    old !== value
+  ) {
+
     el.classList.remove("updated");
+
     void el.offsetWidth;
+
     el.classList.add("updated");
   }
 
@@ -42,63 +61,141 @@ function animateChange(el, value, key) {
 
 /* FORMAT CHANGE */
 function formatChange(v) {
+
   const n = toNumber(v);
 
-  if (isNaN(n)) return { text: "--", type: "neutral" };
-  if (n > 0) return { text: `+${n}`, type: "pos" };
-  if (n < 0) return { text: `${n}`, type: "neg" };
-  return { text: "0", type: "neutral" };
+  if (isNaN(n)) {
+    return {
+      text:"--",
+      type:"neutral"
+    };
+  }
+
+  if (n > 0) {
+    return {
+      text:`+${n}`,
+      type:"pos"
+    };
+  }
+
+  if (n < 0) {
+    return {
+      text:`${n}`,
+      type:"neg"
+    };
+  }
+
+  return {
+    text:"0",
+    type:"neutral"
+  };
+}
+
+/* SEAT PERCENT */
+function getSeatPercent(seats) {
+
+  const n =
+    toNumber(seats);
+
+  return (
+    (n / TOTAL_SEATS) * 100
+  ).toFixed(1);
 }
 
 /* UPDATE TRACKING */
-function addUpdate(party, seats, key) {
-  const now = Date.now();
-  const curr = toNumber(seats);
+function addUpdate(
+  party,
+  seats,
+  key
+) {
 
-  const prev = previousSnapshot[party];
+  const now = Date.now();
+
+  const curr =
+    toNumber(seats);
+
+  const prev =
+    previousSnapshot[party];
 
   if (prev === undefined) {
-    previousSnapshot[party] = curr;
+
+    previousSnapshot[party] =
+      curr;
+
     return;
   }
 
-  const delta = curr - prev;
+  const delta =
+    curr - prev;
 
   if (delta === 0) return;
 
   updates.push({
-    id: now + Math.random(),
-    time: now,
-    displayTime: new Date(now).toLocaleTimeString("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit"
-    }),
+
+    id:
+      now + Math.random(),
+
+    time:now,
+
+    displayTime:
+      new Date(now)
+        .toLocaleTimeString(
+          "en-GB",
+          {
+            hour:"2-digit",
+            minute:"2-digit"
+          }
+        ),
+
     party,
     delta,
     key
   });
 
-  previousSnapshot[party] = curr;
+  previousSnapshot[party] =
+    curr;
 
   renderUpdates();
 }
 
 /* CLEAN OLD ENTRIES */
 function cleanupUpdates() {
-  const now = Date.now();
 
-  updates = updates.filter(u => now - u.time < KEEP_MS + 4000);
+  const now =
+    Date.now();
+
+  updates =
+    updates.filter(
+      u =>
+        now - u.time <
+        KEEP_MS + 4000
+    );
 
   updates.forEach(u => {
+
     if (!u.el) return;
 
-    if (now - u.time > KEEP_MS && !u.fading) {
+    if (
+      now - u.time >
+      KEEP_MS &&
+      !u.fading
+    ) {
+
       u.fading = true;
-      u.el.classList.add("removing");
+
+      u.el.classList.add(
+        "removing"
+      );
 
       setTimeout(() => {
-        updates = updates.filter(x => x.id !== u.id);
+
+        updates =
+          updates.filter(
+            x => x.id !== u.id
+          );
+
         renderUpdates();
+
       }, 400);
     }
   });
@@ -106,7 +203,11 @@ function cleanupUpdates() {
 
 /* RENDER UPDATES */
 function renderUpdates() {
-  const list = document.getElementById("updatesList");
+
+  const list =
+    document.getElementById(
+      "updatesList"
+    );
 
   if (!list) return;
 
@@ -117,17 +218,33 @@ function renderUpdates() {
     .reverse()
     .forEach(u => {
 
-      const div = document.createElement("div");
+      const div =
+        document.createElement(
+          "div"
+        );
 
-      div.className = `update-item ${u.key}`;
+      div.className =
+        `update-item ${u.key}`;
 
-      const sign = u.delta > 0 ? "+" : "";
+      const sign =
+        u.delta > 0 ? "+" : "";
 
       div.innerHTML = `
-        <span class="rt-time">${u.displayTime}</span>
-        <span class="rt-party">${u.party}</span>
-        <span class="rt-sep">:</span>
-        <span class="rt-delta">${sign}${u.delta}</span>
+        <span class="rt-time">
+          ${u.displayTime}
+        </span>
+
+        <span class="rt-party">
+          ${u.party}
+        </span>
+
+        <span class="rt-sep">
+          :
+        </span>
+
+        <span class="rt-delta">
+          ${sign}${u.delta}
+        </span>
       `;
 
       u.el = div;
@@ -140,63 +257,119 @@ function renderUpdates() {
 function parseBBC(data) {
 
   const cards =
-    data?.scoreboard?.groups?.[0]?.scorecards || [];
+    data?.scoreboard
+      ?.groups?.[0]
+      ?.scorecards || [];
 
   const get = t =>
-    cards.find(c => c.title === t);
+    cards.find(
+      c => c.title === t
+    );
 
   const extract = c => ({
-    councils: c?.dataColumnsFormatted?.[0]?.[0] ?? "--",
-    seats: c?.dataColumnsFormatted?.[1]?.[0] ?? "--",
-    change: c?.dataColumnsFormatted?.[1]?.[1] ?? "--"
+
+    councils:
+      c?.dataColumnsFormatted?.[0]?.[0]
+      ?? "--",
+
+    seats:
+      c?.dataColumnsFormatted?.[1]?.[0]
+      ?? "--",
+
+    change:
+      c?.dataColumnsFormatted?.[1]?.[1]
+      ?? "--"
   });
 
   return [
+
     {
       name:"Reform UK",
       key:"reform",
-      data:extract(get("Reform UK"))
+      data:extract(
+        get("Reform UK")
+      )
     },
 
     {
       name:"Conservative",
       key:"conservative",
-      data:extract(get("Conservative"))
+      data:extract(
+        get("Conservative")
+      )
     },
 
     {
       name:"Labour",
       key:"labour",
-      data:extract(get("Labour"))
+      data:extract(
+        get("Labour")
+      )
     },
 
     {
       name:"Liberal Democrats",
       key:"libdem",
-      data:extract(get("Liberal Democrat"))
+      data:extract(
+        get("Liberal Democrat")
+      )
     },
 
     {
       name:"Green",
       key:"green",
-      data:extract(get("Green"))
+      data:extract(
+        get("Green")
+      )
     },
 
     {
       name:"Independent",
       key:"independent",
-      data:extract(get("Independents and others"))
+      data:extract(
+        get("Independents and others")
+      )
     }
   ];
 }
 
 /* SORT */
 function sortDescending(data) {
+
   return data.sort(
     (a, b) =>
-      toNumber(b.data.seats) -
-      toNumber(a.data.seats)
+      toNumber(
+        b.data.seats
+      ) -
+      toNumber(
+        a.data.seats
+      )
   );
+}
+
+/* COUNTED STATS */
+function updateCountedStats(data) {
+
+  const counted =
+    data.reduce(
+      (total, p) =>
+        total +
+        toNumber(
+          p.data.seats
+        ),
+      0
+    );
+
+  const percent =
+    (
+      (counted / TOTAL_SEATS)
+      * 100
+    ).toFixed(1);
+
+  document.getElementById(
+    "countedStats"
+  ).textContent =
+    `${counted.toLocaleString("en-GB")}/5,066 seats counted - ${percent}%`;
 }
 
 /* CURSOR HIDE */
@@ -204,12 +377,16 @@ let idleTimer;
 
 function resetCursor() {
 
-  document.body.style.cursor = "default";
+  document.body.style.cursor =
+    "default";
 
   clearTimeout(idleTimer);
 
   idleTimer = setTimeout(() => {
-    document.body.style.cursor = "none";
+
+    document.body.style.cursor =
+      "none";
+
   }, 3000);
 }
 
@@ -220,6 +397,7 @@ function resetCursor() {
   "touchstart",
   "scroll"
 ].forEach(e =>
+
   window.addEventListener(
     e,
     resetCursor,
@@ -233,31 +411,74 @@ resetCursor();
 function createCard(p) {
 
   const card =
-    document.createElement("section");
+    document.createElement(
+      "section"
+    );
 
-  card.className = `card ${p.key}`;
+  card.className =
+    `card ${p.key}`;
 
   const change =
-    formatChange(p.data.change);
+    formatChange(
+      p.data.change
+    );
+
+  const seatPercent =
+    getSeatPercent(
+      p.data.seats
+    );
 
   card.innerHTML = `
-    <div class="name">${p.name}</div>
+
+    <div class="name">
+      ${p.name}
+    </div>
+
+    <div class="seat-share">
+
+      <div class="value seat-share-number">
+        ${seatPercent}%
+      </div>
+
+      <div class="label seat-share-label">
+        of all seats
+      </div>
+
+    </div>
 
     <div class="metrics">
 
       <div class="metric">
-        <div class="label">Seats</div>
-        <div class="value seats"></div>
+
+        <div class="label">
+          Seats
+        </div>
+
+        <div class="value seats">
+        </div>
+
       </div>
 
       <div class="metric">
-        <div class="label">Councils</div>
-        <div class="value councils"></div>
+
+        <div class="label">
+          Councils
+        </div>
+
+        <div class="value councils">
+        </div>
+
       </div>
 
       <div class="metric">
-        <div class="label">Change</div>
-        <div class="value change ${change.type}"></div>
+
+        <div class="label">
+          Change
+        </div>
+
+        <div class="value change ${change.type}">
+        </div>
+
       </div>
 
     </div>
@@ -281,6 +502,12 @@ function createCard(p) {
     p.key + "_c"
   );
 
+  animateChange(
+    card.querySelector(".seat-share-number"),
+    `${seatPercent}%`,
+    p.key + "_pct"
+  );
+
   addUpdate(
     p.name,
     p.data.seats,
@@ -294,12 +521,16 @@ function createCard(p) {
 function render(data) {
 
   const grid =
-    document.getElementById("grid");
+    document.getElementById(
+      "grid"
+    );
 
   grid.innerHTML = "";
 
   data.forEach(p =>
-    grid.appendChild(createCard(p))
+    grid.appendChild(
+      createCard(p)
+    )
   );
 }
 
@@ -308,24 +539,32 @@ async function fetchData() {
 
   try {
 
-    const res = await fetch(
-      DATA_URL,
-      { cache:"no-store" }
+    const res =
+      await fetch(
+        DATA_URL,
+        {
+          cache:"no-store"
+        }
+      );
+
+    const json =
+      await res.json();
+
+    let data =
+      parseBBC(json);
+
+    data =
+      sortDescending(data);
+
+    updateCountedStats(
+      data
     );
-
-    const json = await res.json();
-
-    let data = parseBBC(json);
-
-    data = sortDescending(data);
-    updateCountedStats(data);
 
     render(data);
 
   } catch (e) {
 
     console.error(e);
-
   }
 }
 
@@ -341,42 +580,33 @@ function tick() {
 
 tick();
 
-setInterval(tick, 3000);
+setInterval(
+  tick,
+  3000
+);
 
 /* FULLSCREEN */
 const fsBtn =
-  document.getElementById("fsBtn");
+  document.getElementById(
+    "fsBtn"
+  );
 
-fsBtn.addEventListener("click", () => {
+fsBtn.addEventListener(
+  "click",
+  () => {
 
-  const doc =
-    document.documentElement;
+    const doc =
+      document.documentElement;
 
-  if (!document.fullscreenElement) {
+    if (
+      !document.fullscreenElement
+    ) {
 
-    doc.requestFullscreen?.();
+      doc.requestFullscreen?.();
 
-  } else {
+    } else {
 
-    document.exitFullscreen?.();
-
+      document.exitFullscreen?.();
+    }
   }
-});
-
-const TOTAL_SEATS = 5066;
-
-function updateCountedStats(data) {
-
-  const counted =
-    data.reduce(
-      (total, p) => total + toNumber(p.data.seats),
-      0
-    );
-
-  const percent =
-    ((counted / TOTAL_SEATS) * 100)
-      .toFixed(1);
-
-  document.getElementById("countedStats").textContent =
-    `${counted.toLocaleString("en-GB")}/5,066 seats counted - ${percent}%`;
-}
+);

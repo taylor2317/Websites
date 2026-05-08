@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UK Election Dashboard</title>
+
 <link rel="stylesheet" href="styles.css">
+
 </head>
 
 <body>
@@ -12,29 +14,45 @@
 <div class="dashboard">
 
     <header class="header">
+
         <div>
             <h1>UK Local Elections 2026</h1>
             <p>Live England council results</p>
         </div>
 
         <div class="updated">
-            Updated: <span id="time">--:--:--</span>
+            Updated:
+            <span id="time">--:--:--</span>
         </div>
 
-        <p id="countedStats">0/5,066 seats counted - 0%</p>
+        <p id="countedStats">
+            0/5,066 seats counted - 0%
+        </p>
 
         <button id="fsBtn" class="fs-btn">
             <i class="fas fa-expand"></i>
         </button>
+
     </header>
 
     <div class="main-area">
 
-        <main class="grid" id="grid"></main>
+        <main
+            class="grid"
+            id="grid">
+        </main>
 
         <aside class="updates-panel">
-            <div class="panel-title">Recent Changes</div>
-            <div class="panel-list" id="updatesList"></div>
+
+            <div class="panel-title">
+                Recent Changes
+            </div>
+
+            <div
+                class="panel-list"
+                id="updatesList">
+            </div>
+
         </aside>
 
     </div>
@@ -42,6 +60,8 @@
 </div>
 
 <script src="scripts.js"></script>
+
 <script src="https://kit.fontawesome.com/7e891fcb86.js"></script>
+
 </body>
 </html>
