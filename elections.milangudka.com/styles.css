@@ -105,3 +105,34 @@ body{
 .pos{color:#00ff99;}
 .neg{color:#ff6b6b;}
 .neutral{color:#e0e0e0;}
+
+/* NUMBER CHANGE ANIMATION */
+@keyframes pop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+}
+
+.value.updated {
+    animation: pop 0.75s ease;
+}
+
+.flash-up {
+    animation: flashUp 1s ease;
+}
+
+.flash-down {
+    animation: flashDown 1s ease;
+}
+
+@keyframes flashUp {
+    0% { text-shadow: 0 0 0px rgba(0,255,153,0); }
+    30% { text-shadow: 0 0 12px rgba(0,255,153,0.9); }
+    100% { text-shadow: 0 0 0px rgba(0,255,153,0); }
+}
+
+@keyframes flashDown {
+    0% { text-shadow: 0 0 0px rgba(255,107,107,0); }
+    30% { text-shadow: 0 0 12px rgba(255,107,107,0.9); }
+    100% { text-shadow: 0 0 0px rgba(255,107,107,0); }
+}

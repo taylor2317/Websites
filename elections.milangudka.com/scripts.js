@@ -1,6 +1,9 @@
 const DATA_URL =
 "https://static.files.bbci.co.uk/elections/data/news/election/2026/england/results";
 
+/* STORE PREVIOUS VALUES FOR ANIMATION */
+const previousValues = {};
+
 /* TIME */
 function updateTime() {
   const now = new Date();
@@ -8,7 +11,7 @@ function updateTime() {
     now.toLocaleTimeString("en-GB");
 }
 
-/* FORMAT */
+/* FORMAT CHANGE */
 function formatChange(value) {
   if (value === null || value === undefined) return "--";
   const num = parseInt(value, 10);
@@ -16,7 +19,39 @@ function formatChange(value) {
   return (num > 0 ? "+" : "") + num;
 }
 
-/* PARSE BBC */
+/* ANIMATE NUMBER CHANGES */
+function animateChange(el, newValue, key) {
+  const oldValue = previousValues[key];
+
+  if (oldValue !== undefined && oldValue === newValue) {
+    el.textContent = newValue;
+    return;
+  }
+
+  el.textContent = newValue;
+
+  el.classList.remove("updated");
+
+  // re-trigger animation
+  void el.offsetWidth;
+  el.classList.add("updated");
+
+  previousValues[key] = newValue;
+}
+
+/* APPLY CHANGE COLOURS */
+function applyChangeClass(el, value) {
+  el.classList.remove("pos", "neg", "neutral");
+
+  const num = parseInt(value, 10);
+
+  if (isNaN(num)) el.classList.add("neutral");
+  else if (num > 0) el.classList.add("pos");
+  else if (num < 0) el.classList.add("neg");
+  else el.classList.add("neutral");
+}
+
+/* PARSE BBC DATA */
 function parseBBC(data) {
   const cards = data?.scoreboard?.groups?.[0]?.scorecards || [];
 
@@ -27,8 +62,6 @@ function parseBBC(data) {
 
     const seats = card.dataColumnsFormatted?.[1]?.[0] ?? "--";
     const change = card.dataColumnsFormatted?.[1]?.[1] ?? "--";
-
-    // councils not clearly defined in source → fallback safe attempt
     const councils = card.dataColumnsFormatted?.[0]?.[0] ?? "--";
 
     return { seats, councils, change };
@@ -44,7 +77,7 @@ function parseBBC(data) {
   ];
 }
 
-/* SORT */
+/* SORT BY SEATS DESCENDING */
 function sortDescending(parties) {
   return parties.sort((a, b) => {
     const aSeats = parseInt(a.data.seats, 10) || 0;
@@ -53,7 +86,7 @@ function sortDescending(parties) {
   });
 }
 
-/* CARD */
+/* CREATE CARD */
 function createCard(party) {
   const card = document.createElement("section");
   card.className = `card ${party.key}`;
@@ -64,44 +97,50 @@ function createCard(party) {
     <div class="metrics">
         <div class="metric">
             <div class="label">Seats</div>
-            <div class="value">${party.data.seats}</div>
+            <div class="value seats"></div>
         </div>
 
         <div class="metric">
             <div class="label">Councils</div>
-            <div class="value">${party.data.councils}</div>
+            <div class="value councils"></div>
         </div>
 
         <div class="metric">
             <div class="label">Change</div>
-            <div class="value change">${formatChange(party.data.change)}</div>
+            <div class="value change"></div>
         </div>
     </div>
   `;
 
-  const changeEl = card.querySelector(".change");
-  const num = parseInt(party.data.change, 10);
-
-  changeEl.classList.remove("pos", "neg", "neutral");
-  if (isNaN(num)) changeEl.classList.add("neutral");
-  else if (num > 0) changeEl.classList.add("pos");
-  else if (num < 0) changeEl.classList.add("neg");
-  else changeEl.classList.add("neutral");
-
   return card;
 }
 
-/* RENDER */
+/* RENDER DASHBOARD */
 function render(parties) {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
 
   parties.forEach(p => {
-    grid.appendChild(createCard(p));
+    const card = createCard(p);
+
+    const seatsEl = card.querySelector(".seats");
+    const councilsEl = card.querySelector(".councils");
+    const changeEl = card.querySelector(".change");
+
+    const k = p.key;
+
+    animateChange(seatsEl, p.data.seats, k + "_seats");
+    animateChange(councilsEl, p.data.councils, k + "_councils");
+
+    const formattedChange = formatChange(p.data.change);
+    animateChange(changeEl, formattedChange, k + "_change");
+    applyChangeClass(changeEl, p.data.change);
+
+    grid.appendChild(card);
   });
 }
 
-/* FETCH */
+/* FETCH DATA */
 async function fetchData() {
   try {
     const res = await fetch(DATA_URL, { cache: "no-store" });
@@ -117,7 +156,7 @@ async function fetchData() {
   }
 }
 
-/* LOOP */
+/* MAIN LOOP */
 function update() {
   updateTime();
   fetchData();
@@ -140,7 +179,7 @@ fsBtn.addEventListener("click", async () => {
   }
 });
 
-/* CURSOR HIDE */
+/* CURSOR HIDE AFTER IDLE */
 let idleTimer;
 
 function resetIdleTimer() {
