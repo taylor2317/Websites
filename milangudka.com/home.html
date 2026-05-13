@@ -37,19 +37,99 @@
         <a href="contact.html">Contact Me</a><br>
     </div>
 
-    <div class="contForm">
-        <h1>Contact Form</h1>
-        <h4 style="user-select: none">Please Note: <req>*</req> indicates a required field.</h4>
-        <form name="contact" method="POST" data-netlify="true" action="submit.html">
-            <p><label>Full Name <req>*</req> : <input type="text" required name="name" /></label></p>
-            <p><label>Email <req>*</req> : <input type="email" required name="email" /></label></p>
-            <p><label>Subject <req>*</req> : <input type="text" name="subject" required name="subject" /></label></p>
-            <p><label>Message <req>*</req> : <textarea style="height:100px; width: 200px;" required name="message"></textarea></label></p>
-            <p><button type="submit">Send</button></p>
-        </form>
+    <main>
+        <section class="homeHero" id="welcome">
+            <div class="heroTerminal" aria-label="Portfolio terminal introduction">
+                <div class="terminalBar">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="terminalBody">
+                    <p><span>$</span> whoami</p>
+                    <h1>Milan Gudka</h1>
+                    <p><span>&gt;</span> computer science student</p>
+                    <p><span>&gt;</span> front-end developer</p>
+                    <p><span>&gt;</span> tutor and practical tool builder</p>
+                </div>
+            </div>
 
-        <h4>If you experience any difficulties, please email <a href="mailto:mgudka2317@hotmail.com">mgudka2317@hotmail.com</a>.</h4>
-    </div>
+            <div class="heroCopy">
+                <p class="eyebrow">Builds websites / automates workflows / teaches code</p>
+                <h2>Portfolio work with a developer's eye for structure, polish and interaction.</h2>
+                <p class="heroIntro">I design and build responsive web experiences, dashboards and study tools that are clear enough to use quickly and detailed enough to feel memorable.</p>
+                <div class="heroActions">
+                    <a href="portfolio.html">Explore Work</a>
+                    <a href="contact.html">Get In Touch</a>
+                </div>
+                <div class="techStack" aria-label="Technology focus">
+                    <span>HTML</span>
+                    <span>CSS</span>
+                    <span>JavaScript</span>
+                    <span>Google Apps Script</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="homeStrip" id="homeCont">
+            <span>Available for tutoring</span>
+            <span>Portfolio builds</span>
+            <span>Automation ideas</span>
+            <span>Student-led projects</span>
+        </section>
+
+        <section class="homeGrid">
+            <article class="homePanel introPanel">
+                <p class="eyebrow">What I Do</p>
+                <h2>Frontend detail, practical problem solving and cleaner digital workflows.</h2>
+                <p>The common thread is usability: interfaces should be easy to understand, pleasant to navigate and sturdy enough to use repeatedly.</p>
+                <div class="actionButt">
+                    <a href="about.html">More About Me</a>
+                </div>
+            </article>
+
+            <article class="homePanel">
+                <i class="fa-solid fa-code"></i>
+                <h3>Front-end Development</h3>
+                <p>Responsive pages, visual polish, interactive components and lightweight JavaScript.</p>
+            </article>
+
+            <article class="homePanel">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <h3>Computer Science Tutoring</h3>
+                <p>Online support for ages 11-16, with clear explanations and confidence-building practice.</p>
+            </article>
+
+            <article class="homePanel">
+                <i class="fa-solid fa-table-cells"></i>
+                <h3>Practical Tools</h3>
+                <p>Dashboards, trackers, Google Apps Script automations and workflow helpers.</p>
+            </article>
+        </section>
+
+        <section class="featuredWork">
+            <div class="sectionHead">
+                <p class="eyebrow">Selected Work</p>
+                <h2>Recent projects with a technical edge.</h2>
+            </div>
+            <div class="workCards">
+                <a href="elections.html" class="workCard">
+                    <img src="Resources/Elections Website.png" alt="Election tracker preview">
+                    <h3>UK Local Elections Tracker</h3>
+                    <p>Live data presentation for fast, readable result updates.</p>
+                </a>
+                <a href="sussex-hackathon.html" class="workCard">
+                    <img src="Resources/Hackathon OS.png" alt="Hackathon operating system preview">
+                    <h3>Sussex Hackathon</h3>
+                    <p>A hackathon project focused on problem solving under pressure.</p>
+                </a>
+            </div>
+            <div class="actionButt">
+                <a href="portfolio.html">Explore All Work</a>
+                <a href="cv.html">View CV</a>
+            </div>
+        </section>
+    </main>
 
     <div class="footer">
         <h1><a href="home.html">Milan Gudka</a></h1>
@@ -58,7 +138,7 @@
             <a href="https://linkedin.com/in/mgudka2317/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/taylor2317" target="_blank"><i class="fa-brands fa-github"></i></a>
         </div>
-        <i class="fa-solid fa-droplet-slash" title="Toggle High-Contrast Mode" onclick="toggleHighContrast()"></i>
+        <i class="fa-solid fa-droplet-slash" title="Toggle high-contrast mode" onclick="toggleHighContrast()"></i>
     </div>
 </body>
 </html>

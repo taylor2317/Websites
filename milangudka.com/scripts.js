@@ -1,138 +1,79 @@
-let gcse = false;
-let alevel = false;
-let i = 0;
-
-const GCSE = [
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Front%20Cover.png",
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Contextual%20Problem.png",
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Product%20Analysis.png",
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Design%20Ideas.png",
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Developed%20Ideas.png",
-    "https://milangudka.com/Resources/Coursework/GCSE%20DT/GCSE%20DT%20Orthographic.png"
-];
-
-const ALevel = [
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Front%20Cover.png",
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Secondary%20Research.png",
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Design%20Concepts.png",
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Client%20Feedback.png",
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Assessing%20Feedback.png",
-    "https://milangudka.com/Resources/Coursework/A-Level%20DT/A-Level%20DT%20Health%20%26%20Safety.png"
-];
-
-
-function GCSEDTPopup() {
-    console.log("GCSE Popup activated.");
-    gcse = true;
-    alevel = false;
-    i = 0;
-    console.log("GCSE is set to true. A-Level is set to false. Image index (i) reset to 0.");
-    popups();
+function menu() {
+    console.log("Toggling menu visibility...");
+    document.querySelectorAll('.menuList').forEach(element => {
+        const currentDisplay = element.style.display;
+        const newDisplay = (currentDisplay === 'none' || currentDisplay === '') ? 'block' : 'none';
+        
+        element.style.display = newDisplay;
+        console.log(`Menu element toggled: ${element}, display set to: ${newDisplay}`);
+    });
 }
 
-function ALevelDTPopup() {
-    console.log("A-Level Popup activated.");
-    alevel = true;
-    gcse = false;
-    i = 0;
-    console.log("A-Level is set to true. GCSE is set to false. Image index (i) reset to 0.");
-    popups();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const revealItems = document.querySelectorAll('.welcome, .homeHero, .homeStrip, .homeGrid, .homePanel, .featuredWork, .workCard, .homeCards, .pageBlock, .card, .portCard, .soloCard, .cv, .references, .project, .quotes, .contForm, .footer');
 
-function popups() {
-    console.log("Popup displayed.");
-    document.querySelector('.popup').style.display = 'block';
-    generateDots();
-    updateImage();
-}
+    const canRevealOnScroll = 'IntersectionObserver' in window;
 
-function popupClose() {
-    console.log("Popup closed.");
-    document.querySelector('.popup').style.display = 'none';
-    gcse = false;
-    alevel = false;
-}
+    if (canRevealOnScroll) {
+        revealItems.forEach(item => item.classList.add('reveal-ready'));
 
-function next() {
-    console.log("Next button clicked.");
-    i = (i + 1) % getCurrentArray().length;
-    console.log("Image index updated to " + i);
-    updateImage();
-}
-
-function prev() {
-    console.log("Previous button clicked.");
-    i = (i - 1 + getCurrentArray().length) % getCurrentArray().length;
-    console.log("Image index updated to " + i);
-    updateImage();
-}
-
-function updateImage() {
-    const img = document.getElementById("popupImg");
-    const array = getCurrentArray();
-    if (img && array.length > 0) {
-        console.log("Updating image with source: " + array[i]);
-        img.src = array[i]; // This must match the correct full path
-        console.log("Image src set to:", img.src);
-        updateDots();
-    }
-    
-    else {
-        console.log("No image found or array is empty.");
-    }
-}
-
-
-function getCurrentArray() {
-    if (gcse) {
-        console.log("Returning GCSE image array.");
-        return GCSE;
-    }
-    
-    else if (alevel) {
-        console.log("Returning A-Level image array.");
-        return ALevel;
-    }
-    
-    else {
-        console.log("No image array selected.");
-        return [];
-    }
-}
-
-function generateDots() {
-    const array = getCurrentArray();
-    const dotsContainer = document.querySelector(".dots");
-
-    if (!dotsContainer) return;
-
-    // Clear previous dots
-    dotsContainer.innerHTML = "";
-
-    array.forEach((_, index) => {
-        const dot = document.createElement("i");
-        dot.classList.add("fa-solid", "fa-circle");
-        if (index === i) dot.classList.add("active");
-
-        dot.addEventListener("click", () => {
-            i = index;
-            updateImage();
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal-in');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: '0px 0px -50px 0px'
         });
 
-        dotsContainer.appendChild(dot);
-    });
-}
+        revealItems.forEach(item => revealObserver.observe(item));
+    } else {
+        revealItems.forEach(item => item.classList.add('reveal-in'));
+    }
 
-
-function updateDots() {
-    const dots = document.querySelectorAll(".dots i");
-    console.log("Updating dots.");
-
-    dots.forEach((dot, index) => {
-        if (index === i) {
-            dot.classList.add("active");
-        } else {
-            dot.classList.remove("active");
+    document.querySelectorAll('[onclick]').forEach(element => {
+        if (!element.hasAttribute('role')) {
+            element.setAttribute('role', 'button');
         }
+
+        const isAnchorWithHref = element.tagName.toLowerCase() === 'a' && element.hasAttribute('href');
+
+        if (!element.hasAttribute('tabindex') && !isAnchorWithHref) {
+            element.setAttribute('tabindex', '0');
+        }
+
+        element.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                element.click();
+            }
+        });
     });
-}
+
+    document.querySelectorAll('a[href="#"]').forEach(link => {
+        link.addEventListener('click', event => event.preventDefault());
+    });
+
+    const canUseCustomCursor = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    if (canUseCustomCursor) {
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        window.addEventListener('pointermove', (event) => {
+            document.documentElement.style.setProperty('--cursor-x', `${event.clientX}px`);
+            document.documentElement.style.setProperty('--cursor-y', `${event.clientY}px`);
+            cursor.style.left = `${event.clientX}px`;
+            cursor.style.top = `${event.clientY}px`;
+        });
+
+        document.querySelectorAll('a, button, input, textarea, [onclick], .menuButton').forEach(element => {
+            element.addEventListener('pointerenter', () => cursor.classList.add('is-hovering'));
+            element.addEventListener('pointerleave', () => cursor.classList.remove('is-hovering'));
+        });
+    }
+});
