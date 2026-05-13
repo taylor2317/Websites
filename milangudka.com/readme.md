@@ -1,25 +1,3 @@
-# COLOUR PALETTE:
-#15B295FF <br>
-#15B295EE <br>
-#008080FF <br>
-#008080EE <br>
-#00808066 <br>
-#0080804D <br>
-#FF0000FF <br>
-#FFFFFFFF <br>
-#F9F9F9FF <br>
-#F0F0F0FF <br>
-#E0E0E0FF <br>
-#D3D3D3FF <br>
-#808080FF <br>
-#000000FF <br>
-#00000000
-
-# SITE LINK:
-https://milangudka.com/
-
-# HEADER:
-```htm
 <!DOCTYPE "html">
 <html lang="en">
 <head>
@@ -58,10 +36,36 @@ https://milangudka.com/
         <a href="portfolio.html">Portfolio</a><br>
         <a href="contact.html">Contact Me</a><br>
     </div>
-```
 
-# FOOTER:
-```htm
+    <div class="welcome" id="welcome">
+        <h1>Milan Gudka</h1>
+        <p>a.k.a Taylor</p>
+        <h2>Personal and Professional <br> Web Development Solutions</h2>
+        <div class="arrows">
+            <a href="#homeCont"><i class="fa-solid fa-chevron-down"></i></a>
+        </div>
+    </div>
+
+    <div class="homeCont" id="homeCont">
+        <div class="homeCards">
+            <h2>Tutoring</h2>
+            <p>Computer Science Online Tutoring offered from ages 11 - 16.<br>Prices from <price>£15 /hour.</price></p>
+            <div class="actionButt">
+                <a href="contact.html">Contact Me</a>
+            </div>
+        </div>
+        <div class="homeCards">
+            <h2>Professional Skills</h2>
+            <p>Find out more about me, and my past experience. Curriculum Vitae available here.</p>
+            <div class="actionButt">
+                <a href="about.html">About Me</a>
+                <a href="cv.html">CV</a>
+            </div>
+        </div>
+    </div>
+
+<br>
+
     <div class="footer">
         <h1><a href="home.html">Milan Gudka</a></h1>
         <p><a href="mailto:mgudka2317@hotmail.com">mgudka2317@hotmail.com</a></p><br>
@@ -69,13 +73,11 @@ https://milangudka.com/
             <a href="https://linkedin.com/in/mgudka2317/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/taylor2317" target="_blank"><i class="fa-brands fa-github"></i></a>
         </div>
-        <i class="fa-solid fa-droplet-slash" title="Toggle High-Contrast Mode" onclick="toggleHighContrast()"></i>
+        <i class="fa-solid fa-droplet-slash" onclick="toggleHighContrast()"></i>
     </div>
 </body>
 </html>
 
 <script src="scripts.js"></script>
 <script src="contrast.js"></script>
-<!--script src="popups.js"></script!-->
 <script src="https://kit.fontawesome.com/7e891fcb86.js" crossorigin="anonymous"></script>
-```
